@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <Package Version="3">
+    <Name Value="tponguard"/>
+    <Author Value="Turbo Power Software Company ,Colorado Springs"/>
+    <CompilerOptions>
+      <Version Value="8"/>
+      <SearchPaths>
+        <IncludeFiles Value="../source/"/>
+        <OtherUnitFiles Value="../source/"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+        <SrcPath Value="../source/"/>
+      </SearchPaths>
+      <Other>
+        <CompilerPath Value="$(CompPath)"/>
+      </Other>
+    </CompilerOptions>
+    <Description Value="TurboPower OnGuard is a library to create demo versions of your Borland Delphi &amp; C++Builder applications. Create demo versions that are time-limited, feature-limited, limited to a certain number of uses, or limited to a certain # of concurrent network users.
+Ports :   Andrew Haines (Kylix version), Bogusław Brandys (FPC/Lazarus)"/>
+    <License Value="Mozilla Public License 1.1 (MPL 1.1) 
+
+"/>
+    <Version Major="1"/>
+    <Files Count="22">
+      <Item1>
+        <Filename Value="../source/ogfile.pas"/>
+        <UnitName Value="ogfile"/>
+      </Item1>
+      <Item2>
+        <Filename Value="../source/ognetwrk.pas"/>
+        <UnitName Value="ognetwrk"/>
+      </Item2>
+      <Item3>
+        <Filename Value="../source/ogproexe.pas"/>
+        <UnitName Value="ogproexe"/>
+      </Item3>
+      <Item4>
+        <Filename Value="../source/ogreg.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="ogreg"/>
+      </Item4>
+      <Item5>
+        <Filename Value="../source/ogutil.pas"/>
+        <UnitName Value="ogutil"/>
+      </Item5>
+      <Item6>
+        <Filename Value="../source/qogabout0.lfm"/>
+        <Type Value="LFM"/>
+      </Item6>
+      <Item7>
+        <Filename Value="../source/qogabout0.pas"/>
+        <UnitName Value="qogabout0"/>
+      </Item7>
+      <Item8>
+        <Filename Value="../source/qonguard1.lfm"/>
+        <Type Value="LFM"/>
+      </Item8>
+      <Item9>
+        <Filename Value="../source/qonguard1.pas"/>
+        <UnitName Value="qonguard1"/>
+      </Item9>
+      <Item10>
+        <Filename Value="../source/qonguard2.lfm"/>
+        <Type Value="LFM"/>
+      </Item10>
+      <Item11>
+        <Filename Value="../source/qonguard2.pas"/>
+        <UnitName Value="qonguard2"/>
+      </Item11>
+      <Item12>
+        <Filename Value="../source/qonguard3.lfm"/>
+        <Type Value="LFM"/>
+      </Item12>
+      <Item13>
+        <Filename Value="../source/qonguard3.pas"/>
+        <UnitName Value="qonguard3"/>
+      </Item13>
+      <Item14>
+        <Filename Value="../source/qonguard4.lfm"/>
+        <Type Value="LFM"/>
+      </Item14>
+      <Item15>
+        <Filename Value="../source/qonguard4.pas"/>
+        <UnitName Value="qonguard4"/>
+      </Item15>
+      <Item16>
+        <Filename Value="../source/qonguard5.pas"/>
+        <UnitName Value="qonguard5"/>
+      </Item16>
+      <Item17>
+        <Filename Value="../source/qonguard6.lfm"/>
+        <Type Value="LFM"/>
+      </Item17>
+      <Item18>
+        <Filename Value="../source/qonguard6.lrs"/>
+        <Type Value="LRS"/>
+      </Item18>
+      <Item19>
+        <Filename Value="../source/qonguard6.pas"/>
+        <UnitName Value="qonguard6"/>
+      </Item19>
+      <Item20>
+        <Filename Value="../source/qonguard7.pas"/>
+        <UnitName Value="qonguard7"/>
+      </Item20>
+      <Item21>
+        <Filename Value="../source/ogconst.pas"/>
+        <UnitName Value="ogconst"/>
+      </Item21>
+      <Item22>
+        <Filename Value="../source/onguard.pas"/>
+        <UnitName Value="onguard"/>
+      </Item22>
+    </Files>
+    <Type Value="DesignTime"/>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="fcl"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+        <MinVersion Major="1" Valid="True"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="IDEIntf"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)/"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
