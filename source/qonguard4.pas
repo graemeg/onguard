@@ -95,8 +95,11 @@ end;
 
 procedure TEditProductFrm.InfoChanged(Sender: TObject);
 var
-  Work : TKey;
+  Work: TKey;
 begin
+  {$HINTS OFF}
+  FillChar(Work, SizeOf(Work), 0); // Fill array with zeros
+  {$HINTS ON}
   OKBtn.Enabled := (Length(ProductEd.Text) > 0) and
     (HexToBuffer(KeyEd.Text, Work, SizeOf(Work)));
 end;

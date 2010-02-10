@@ -48,15 +48,14 @@ unit ogutil;
 interface
 
 uses
-  LCLIntf,lclproc
+  SysUtils
 {$IFDEF LINUX}                                                      {AH.01}
   ,BaseUnix
 {$ENDIF}
 {$IFDEF WIN32}
 
 {$ENDIF}                                                            {AH.01}
-  ,SysUtils
-  {$IFNDEF IBO_CONSOLE},Dialogs{$ENDIF}        {AH.02}
+//  {$IFNDEF IBO_CONSOLE},Dialogs{$ENDIF}        {AH.02}
   ;                                                          {!!.08}
 
 const
@@ -66,10 +65,6 @@ const
   DefStoreCode      = False;
   DefStoreModifier  = False;
   DefStoreRegString = False;
-
-const
-  OgVersionStr      = '1.20';
-
 
 
 const
@@ -272,7 +267,7 @@ function FlushFileBuffers(Handle : THandle) : Boolean;
 function GetDriveType(drive:Integer): Integer;
 function HiWord(I: DWORD):Word;
 function CoCreateGuid(out guid: TGUID): HResult;
-function timeGetTime: DWord;
+function timeGetTime: Cardinal;
 {$ENDIF}
 
 
@@ -931,11 +926,9 @@ begin
 end;
 
 
-function timeGetTime: DWord;
+function timeGetTime: Cardinal;
 begin
- // returns the milliseconds since the machine was restarted
- // will wrap around to 0 every 2^32 milliseconds (49.7 days)
- Result := GetTickCount;
+ Result := Cardinal(Trunc(Now * 24 * 60 * 60 * 1000));;
 end;
 {$ENDIF}
 

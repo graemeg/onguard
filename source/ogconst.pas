@@ -42,16 +42,16 @@ unit ogconst;
 interface
 
 resourcestring
- SCNoOnCheck = '%s has no OnChecked event handler assigned';
- SCNoOnGetCode = '%s has no OnGetCode event handler assigned';
- SCNoOnGetKey = '%s has no OnGetKey event handler assigned';
- SCNoOnChangeCode = '%s has no OnChangeCode event handler assigned';
- SCDeleteQuery = 'Are you sure you want to delete this item?';
- SCInvalidStartDate = 'Invalid start date';
- SCInvalidEndDate = 'Invalid end date';
- SCInvalidKeyOrModifier = 'Invalid key or modifier';
- SCInvalidExDate = 'Invalid expiration date';
- SCNoOnGetFileName = 'FileName is empty and OnGetFileName is not assigned';
+  SCNoOnCheck = '%s has no OnChecked event handler assigned';
+  SCNoOnGetCode = '%s has no OnGetCode event handler assigned';
+  SCNoOnGetKey = '%s has no OnGetKey event handler assigned';
+  SCNoOnChangeCode = '%s has no OnChangeCode event handler assigned';
+  SCDeleteQuery = 'Are you sure you want to delete this item?';
+  SCInvalidStartDate = 'Invalid start date';
+  SCInvalidEndDate = 'Invalid end date';
+  SCInvalidKeyOrModifier = 'Invalid key or modifier';
+  SCInvalidExDate = 'Invalid expiration date';
+  SCNoOnGetFileName = 'FileName is empty and OnGetFileName is not assigned';
 
 
 
@@ -61,8 +61,8 @@ const
   {name of section that stores application keys}
   OgKeySection = 'Keys';
 
-
-
+const
+  OgVersionStr = '1.20.1';
 
 
 

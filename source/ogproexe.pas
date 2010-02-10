@@ -56,7 +56,6 @@ interface
 
 uses
   {$IFDEF MSWINDOWS} Windows, {$ENDIF}                             {AH.01}
-  {$IFDEF LINUX} BaseUnix, {$ENDIF}                                    {AH.01}
   Classes,
   {$IFDEF MSWINDOWS} MMSystem, {$ENDIF}                            {AH.01}
   SysUtils,
@@ -101,7 +100,7 @@ type
 
     {property methods}
     function GetAbout : string;                                      {!!.08}
-    procedure SetAbout(const Value : string);                        {!!.08}
+    procedure SetAbout(const AValue : string);                        {!!.08}
 
   protected
     procedure DoOnChecked(Status : TExeStatus);
@@ -161,6 +160,10 @@ procedure UpdateCRC32(var CRC : DWord;  const Buf;  BufSize : LongInt);  {!!.07}
 
 
 implementation
+
+uses
+  ogconst
+  ;
 
 
 {signature = '!~~@CRC32@~~' used before and after}
@@ -244,8 +247,9 @@ begin
     CheckExe(True);
 end;
 
-procedure TOgProtectExe.SetAbout(const Value : string);              {!!.08}
+procedure TOgProtectExe.SetAbout(const AValue : string);              {!!.08}
 begin
+  // do nothing
 end;
 
 function TOgProtectExe.StampExe(const FileName : string ;  EraseMarker : Boolean) : Boolean;

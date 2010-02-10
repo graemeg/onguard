@@ -60,17 +60,16 @@ Fixme.
 
 {====General defines=================================================}
 
-{!!.10}
-{Activate the following define to prevent the TOgMakeCodes Form being
+
+{Activate the following define to include the TOgMakeCodes Form so it is
  compiled into the exe. }
 
-{.$DEFINE NoMakeCodesSupport}
+{.$DEFINE MakeCodesSupport}
 
 
-{!!.10}
-{Activate the following define to prevent the TOgMakeKeys Form being
+{Activate the following define to include the TOgMakeKeys Form so it is
  compiled into the exe. }
 
-{.$DEFINE NoMakeKeysSupport}
+{.$DEFINE MakeKeysSupport}
 
 

@@ -43,27 +43,24 @@ unit onguard;
 interface
 
 uses
+  Classes,
+  SysUtils
 {$IFDEF MSWINDOWS}                                                 {AH.01}
-  Windows,                                                         {AH.01}
+  ,Windows                                                         {AH.01}
 {$ENDIF}                                                           {AH.01}
 {$IFDEF IBO_CONSOLE}
-  ConsoleStubs,
+  ,ConsoleStubs
 {$ENDIF}  
-{$IFDEF LINUX}                                                     {AH.01}
-  BaseUnix,                                                            {AH.01}
-{$ENDIF}                                                           {AH.01}
-  Classes, SysUtils,MD5,
-  ogconst,
-  ogutil
-{$IFNDEF IBO_CONSOLE}
-  ,Controls, Dialogs
-{$ENDIF}
+//{$IFNDEF IBO_CONSOLE}
+//  ,Controls, Dialogs
+//{$ENDIF}
 {$IFDEF UsingZLib}
   ,ZLib
 {$ENDIF}
 {$IFDEF WIN32}
- ,idesn
+  ,idesn
 {$ENDIF}
+  ,ogutil
   ;
 
 {$IFNDEF IBO_CONSOLE}
@@ -609,8 +606,10 @@ const
 implementation
 {$IFNDEF IBO_CONSOLE}
 uses
-  {$IFNDEF NoMakeCodesSupport} qonguard2 {$ENDIF}                    {!!.10}           {!!.10}
-  {$IFNDEF NoMakeKeysSupport} , qonguard3  {$ENDIF}                    {!!.10}           {!!.10}
+  MD5
+  ,ogconst
+  {$IFDEF MakeCodesSupport} ,qonguard2 {$ENDIF}
+  {$IFDEF MakeKeysSupport}  ,qonguard3  {$ENDIF}
   ;
 {$ENDIF}
 {$IFNDEF IBO_CONSOLE}
@@ -1486,12 +1485,12 @@ begin
 end;
 
 function TOgMakeCodes.Execute : Boolean;
-{$IFNDEF NoMakeCodesSupport}                                         {!!.10}
+{$IFDEF MakeCodesSupport}
 var
   F : TCodeGenerateFrm;
-{$ENDIF}                                                             {!!.10}
+{$ENDIF}
 begin
-{$IFNDEF NoMakeCodesSupport}                                         {!!.10}
+{$IFDEF MakeCodesSupport}
   F := TCodeGenerateFrm.Create(Owner);
   try
     F.CodeType := FCodeType;
@@ -1499,7 +1498,7 @@ begin
     F.KeyType := FKeyType;
     F.KeyFileName := FKeyFileName;
     F.ShowHint := FShowHints;
-    Result := F.ShowModal = mrOK;
+    Result := F.ShowModal = 1; // was mrOK but that pulls in a GUI framework
     if Result then begin
       FCode := F.Code;
       F.GetKey(FKey);                                                {!!.08}
@@ -1555,19 +1554,19 @@ begin
 end;
 
 function TOgMakeKeys.Execute : Boolean;
-{$IFNDEF NoMakeCodesSupport}                                         {!!.10}
+{$IFDEF MakeKeysSupport}
 var
   F : TKeyMaintFrm;
-{$ENDIF}                                                             {!!.10}
+{$ENDIF}
 begin
-{$IFNDEF NoMakeCodesSupport}                                         {!!.10}
+{$IFDEF MakeKeysSupport}
   F := TKeyMaintFrm.Create(Owner);
   try
     F.SetKey(FKey);                                                  {!!.08}
     F.KeyType := FKeyType;
     F.KeyFileName := FKeyFileName;
     F.ShowHint := FShowHints;
-    Result := F.ShowModal = mrOK;
+    Result := F.ShowModal = 1;  // was mrOK but that pulls in a GUI framework
     if Result then begin
       F.GetKey(FKey);                                                {!!.08}
       FKeyType := F.KeyType;                                       

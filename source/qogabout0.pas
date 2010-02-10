@@ -103,8 +103,11 @@ type
   end;
 
 implementation
+
 uses
- LResources;
+  LResources
+  ,ogconst
+  ;
 
 
 
