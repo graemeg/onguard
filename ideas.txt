@@ -1,0 +1,30 @@
+----[ ide serial number - NOT SATA or SCSI ]-----------------
+I am using the following code to get the hard disk serial number
+
+struct hd_driveid hd;
+int ide;
+ide=open("/dev/hda",O_RDONLY);
+(void)ioctl(ide,HDIO_GET_IDENTITY,&hd);
+(void)printf("Serial number - %s\n",hd.serial_no);
+
+this is working fine..but for sata hard disk it is not working how 
+to change the code to get SATA hard disk serial number....i 
+changed "/dev/hda" to "dev/sda" that is also not working
+----------------------
+
+* For M2 Centres we know they must be network enabled. So use MAC addy +
+  the IP address. Hash that with MD5 and go from there.
+
+* Use the timestamp (date/time) of the /bin or C:\Windows or C:\WINNT directory.
+  Convert it to seconds since 1970-01-01.
+
+* Use MAC address, MD5 it, then grab 32bits of that.
+
+* Total installed memory. Linux: /proc/meminfo -> MemTotal
+
+* Check partitions on system: Linux: /proc/partitions
+
+* CPU info. 
+  - Brand
+  - # of cores
+  - speed in Mhz
