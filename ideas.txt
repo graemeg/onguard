@@ -1,4 +1,5 @@
-----[ ide serial number - NOT SATA or SCSI ]-----------------
+IDE serial number - NOT SATA or SCSI
+====================================
 I am using the following code to get the hard disk serial number
 
 struct hd_driveid hd;
@@ -10,8 +11,35 @@ ide=open("/dev/hda",O_RDONLY);
 this is working fine..but for sata hard disk it is not working how 
 to change the code to get SATA hard disk serial number....i 
 changed "/dev/hda" to "dev/sda" that is also not working
-----------------------
 
+
+Another alternative to find the HDD serial number
+=================================================
+I think I found another alternative to find the HDD serial number.
+Getting the boot define is fairly easy, so is the serial number for a
+ATA (IDE) hard disk. As I said, SCSI and SATA is a bit more difficult.
+But there seems to be a new method that should work too - I tested it
+in three very different machines, each have a different version of
+Linux too. And more importantly, all without ROOT access.
+
+Knowing the UUID or device (eg: /dev/sda1) one can simply do a lookup
+in the /dev/disk/by-id/ directory. Each file in that directory has the
+following information: <bus>-<brand>-<model>-<serial#>[-<partition>]
+So by simply parsing the name, you can find the serial number of the device.
+
+This option has been verified as available on the following Linux distros:
+  - OpenSuse 11.2
+  - Ubuntu 8.04.2
+  - Debian
+  - Fedora 13 & 14
+  - CentOS
+
+It seems all Linux distros since around 2006 and later have this device
+information files.
+
+
+Ideas for Identifying markers
+=============================
 * For M2 Centres we know they must be network enabled. So use MAC addy +
   the IP address. Hash that with MD5 and go from there.
 
@@ -28,3 +56,11 @@ changed "/dev/hda" to "dev/sda" that is also not working
   - Brand
   - # of cores
   - speed in Mhz
+
+* Query the date/time value of the '/bin' directory under Linux, or the
+  'c:\Windows' (or 'c:\winnt' under Win2000). Then work out how many seconds
+  or milliseconds since say 1980-01-01. You then have a pretty unique value.
+  This chances of somebody else running your software and having installed
+  their OS in the exact same millisecond as somebody else is pretty slim.
+
+
