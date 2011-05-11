@@ -1,0 +1,7 @@
+*.compiled
+*.lps
+*.INI
+units/
+*.ppu
+*.o
+*.bak
