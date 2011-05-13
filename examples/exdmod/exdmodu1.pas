@@ -1,4 +1,4 @@
-(*
+{
 This example shows how to generate a machine modifier at run time
 while using the TOgSerialNumber component. This means the program
 will run only on the machine being used to run the application.
@@ -17,25 +17,24 @@ OnGetKey event), and enter the machine modifier the user gives
 you - not the one automatically generated when you click the
 MachineModifier radio button. Also, if used, make sure the
 Expires date is the same.
-*)
+}
 
 
 unit Exdmodu1;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
-  SysUtils,Classes,Controls,
-  Forms, Dialogs,  StdCtrls, Buttons,
-  OgUtil,OnGuard,IniFiles;
+  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons,
+  OgUtil, OnGuard, IniFiles;
 
 const
-  CKey : TKey = ($E5,$8F,$84,$D6,$92,$C9,$A4,$D8,
-                 $1A,$FA,$6F,$8D,$AB,$FC,$DF,$B4);
+  CKey: TKey =
+        ($E5,$8F,$84,$D6,$92,$C9,$A4,$D8, $1A,$FA,$6F,$8D,$AB,$FC,$DF,$B4);
 
 type
-
-  { TfrmMain }
 
   TfrmMain = class(TForm)
     Memo1: TMemo;
@@ -45,19 +44,14 @@ type
     procedure FormActivate(Sender: TObject);
     procedure OgSerialNumberCode1GetKey(Sender: TObject; var Key: TKey);
     procedure OgSerialNumberCode1GetCode(Sender: TObject; var Code: TCode);
-    procedure OgSerialNumberCode1Checked(Sender: TObject;
-      Status: TCodeStatus);
-    procedure OgSerialNumberCode1GetModifier(Sender: TObject;
-      var Value: Longint);
+    procedure OgSerialNumberCode1Checked(Sender: TObject; Status: TCodeStatus);
+    procedure OgSerialNumberCode1GetModifier(Sender: TObject; var Value: Longint);
   private
-    { Private declarations }
     FExpired : Boolean;
   public
-    { Public declarations }
     TheDir     : string;
     IniSNVal   : longint;
     IniFile    : TIniFile;
-
     function GetSNData(var S : string) : integer;
   end;
 
@@ -66,13 +60,10 @@ var
 
 implementation
 
-
-
 uses
-  LResources,Exdmodu2;
+  Exdmodu2;
 
-{=======================================================================}
-
+{$R *.lfm}
 
 procedure TfrmMain.OgSerialNumberCode1GetKey(Sender: TObject; var Key: TKey);
 begin
@@ -84,19 +75,12 @@ begin
   if FExpired then Application.Terminate;
 end;
 
-
-{=======================================================================}
-
-
 procedure TfrmMain.OgSerialNumberCode1GetModifier(Sender: TObject;
   var Value: Longint);
 begin
   {Generate the value unique to this machine}
   Value := GenerateMachineModifierPrim;
 end;
-
-
-{=======================================================================}
 
 procedure TfrmMain.OgSerialNumberCode1GetCode(Sender: TObject; var Code: TCode);
 var
@@ -146,8 +130,6 @@ begin
     IniFile.Free;
   end;
 end;
-
-{=======================================================================}
 
 function TfrmMain.GetSNData(var S : string) : integer;
 {method used to ask for user input of serial number and release code}
@@ -201,10 +183,7 @@ begin
   end;
 end;
 
-{=======================================================================}
-
-procedure TfrmMain.OgSerialNumberCode1Checked(Sender: TObject;
-                                            Status: TCodeStatus);
+procedure TfrmMain.OgSerialNumberCode1Checked(Sender: TObject; Status: TCodeStatus);
 var
   LI  : longint;
   S   : string;
@@ -243,8 +222,6 @@ begin
   FExpired := true;
 end;
 
-initialization
-{$i exdmodu1.lrs}
 
 end.
 

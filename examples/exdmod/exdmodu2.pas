@@ -1,14 +1,13 @@
 unit Exdmodu2;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
-  SysUtils,Classes,Controls,
-  Forms, Dialogs, StdCtrls, Buttons,LResources;
+  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons;
 
 type
-
-  { TSNEntryDlg }
 
   TSNEntryDlg = class(TForm)
     Label1: TLabel;
@@ -33,11 +32,11 @@ var
 
 implementation
 
-
-
 uses
   OnGuard,
   OgUtil;
+
+{$R *.lfm}
 
 
 procedure TSNEntryDlg.CancelBtnClick(Sender: TObject);
@@ -52,9 +51,6 @@ begin
   LI := GenerateMachineModifierPrim;
   ModString.Text := BufferToHex(LI, SizeOf(longint));
 end;
-
-initialization
-{$i exdmodu2.lrs}
 
 
 end.
