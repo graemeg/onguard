@@ -24,14 +24,20 @@ type
     FKey: TKey;
     FKeyType: TKeyType;
     procedure   InfoChanged(Sender: TObject);
-    procedure   FormCreate(Sender: TObject);
+    procedure   FormShow(Sender: TObject);
     procedure   btnGenerateKeyClicked(Sender: TObject);
+    function    GetProduct: TfpgString;
+    function    GetKeyText: TfpgString;
+    procedure   SetProduct(const AValue: TfpgString);
+    procedure   SetKeyText(const AValue: TfpgString);
   public
     constructor Create(AOwner: TComponent); override;
     procedure   AfterCreate; override;
     procedure   SetKey(AValue: TKey);
     procedure   GetKey(var AValue: TKey);
     property    KeyType: TKeyType read FKeyType write FKeyType;
+    property    Product: TfpgString read GetProduct write SetProduct;
+    property    KeyText: TfpgString read GetKeyText write SetKeyText;
   end;
 
 {@VFD_NEWFORM_DECL}
@@ -39,7 +45,8 @@ type
 implementation
 
 uses
-  frm_keygen;
+  frm_keygen,
+  tiLog;
 
 {@VFD_NEWFORM_IMPL}
 
@@ -47,26 +54,32 @@ procedure TProductMaintForm.InfoChanged(Sender: TObject);
 var
   Work: TKey;
 begin
+  Log('>> TProductMaintForm.InfoChanged', lsDebug);
   {$HINTS OFF}
   FillChar(Work, SizeOf(Work), 0); // Fill array with zeros
   {$HINTS ON}
-  btnOK.Enabled := (Length(edtProduct.Text) > 0) and (HexToBuffer(edtKey.Text, Work, SizeOf(Work)));
+
+  btnOK.Enabled := (Length(edtProduct.Text) > 0) and (Length(edtKey.Text) > 0);
+  //(HexToBuffer(edtKey.Text, Work, SizeOf(Work)));
+  Log('<< TProductMaintForm.InfoChanged', lsDebug);
 end;
 
-procedure TProductMaintForm.FormCreate(Sender: TObject);
+procedure TProductMaintForm.FormShow(Sender: TObject);
 begin
+  Log('>> TProductMaintForm.FormShow', lsDebug);
   InfoChanged(self);
+  Log('<< TProductMaintForm.FormShow', lsDebug);
 end;
 
 procedure TProductMaintForm.btnGenerateKeyClicked(Sender: TObject);
 var
   F: TKeyGenerateForm;
 begin
-  F := TKeyGenerateForm.Create(Self);
+  F := TKeyGenerateForm.Create(nil);
   try
     F.SetKey(FKey);
     F.KeyType := FKeyType;
-    F.ShowHint := GetShowHints;
+//    F.ShowHint := ShowHints;
     if F.ShowModal = mrOK then
     begin
       F.GetKey(FKey);
@@ -86,10 +99,32 @@ begin
   end;
 end;
 
+function TProductMaintForm.GetProduct: TfpgString;
+begin
+  Result := edtProduct.Text;
+end;
+
+function TProductMaintForm.GetKeyText: TfpgString;
+begin
+  Result := edtKey.Text;
+end;
+
+procedure TProductMaintForm.SetProduct(const AValue: TfpgString);
+begin
+  edtProduct.Text := AValue;
+end;
+
+procedure TProductMaintForm.SetKeyText(const AValue: TfpgString);
+begin
+  edtKey.Text := AValue;
+end;
+
 constructor TProductMaintForm.Create(AOwner: TComponent);
 begin
+  Log('>> TProductMaintForm.Create', lsDebug);
   inherited Create(AOwner);
-  OnCreate := @FormCreate;
+  OnShow := @FormShow;
+  Log('<< TProductMaintForm.Create', lsDebug);
 end;
 
 procedure TProductMaintForm.AfterCreate;
@@ -160,6 +195,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
+    ModalResult := mrOK;
     TabOrder := 5;
   end;
 
@@ -173,6 +209,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
+    ModalResult := mrCancel;
     TabOrder := 6;
   end;
 

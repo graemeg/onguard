@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, fpg_base, fpg_main, fpg_form, fpg_label, fpg_button,
-  fpg_listbox, fpg_editbtn;
+  fpg_listbox, fpg_editbtn, fpg_edit, onguard;
 
 type
 
@@ -19,7 +19,7 @@ type
     btnAddApp: TfpgButton;
     btnEditApp: TfpgButton;
     btnDelApp: TfpgButton;
-    lbApplications: TfpgListBox;
+    lbProducts: TfpgListBox;
     Label3: TfpgLabel;
     edtBlockKey: TfpgEdit;
     edtBytesBlockKey: TfpgEdit;
@@ -38,10 +38,12 @@ type
     procedure   btnAddAppClicked(Sender: TObject);
     procedure   btnEditAppClicked(Sender: TObject);
     procedure   btnDelAppClicked(Sender: TObject);
+    procedure   lbProductsClicked(Sender: TObject);
+    procedure   lbProductsDblClicked(Sender: TObject; AButton: TMouseButton; AShift: TShiftState; const AMousePos: TPoint);
   public
     constructor Create(AOwner: TComponent); override;
     procedure   AfterCreate; override;
-    procedure   SetKey(Value: TKey);
+    procedure   SetKey(AValue: TKey);
     procedure   GetKey(var AValue: TKey);
     property    KeyFileName: string read GetKeyFileName write SetKeyFileName;
     property    KeyType: TKeyType read FKeyType write FKeyType;
@@ -53,9 +55,11 @@ implementation
 
 uses
   ogconst,
+  ogutil,
   IniFiles,
   fpg_dialogs,
-  frm_productmaint;
+  frm_productmaint,
+  tiLog;
 
 {@VFD_NEWFORM_IMPL}
 
@@ -66,7 +70,7 @@ end;
 
 procedure TKeyMaintForm.SetKeyFileName(const AValue: string);
 begin
-  edtFileNameEd.Filename := AValue;
+  edtFileName.Filename := AValue;
   InfoChanged(Self);
 end;
 
@@ -81,35 +85,37 @@ var
   IniFile: TIniFile;
 begin
   try
+    {$HINTS OFF}
     FillChar(FKey, SizeOf(FKey), 0);
+    {$HINTS ON}
     if Length(KeyFileName) > 0 then begin
       IniFile := TIniFile.Create(KeyFileName);
       try
-        I := lbApplications.FocusItem;
-        lbApplications.BeginUpdate;
+        I := lbProducts.FocusItem;
+        lbProducts.BeginUpdate;
         try
-          lbApplications.Items.Clear;
-          IniFile.ReadSection(OgKeySection, lbApplications.Items);
-          if I < lbApplications.Items.Count then
-            lbApplications.FocusIndex := I
+          lbProducts.Items.Clear;
+          IniFile.ReadSection(OgKeySection, lbProducts.Items);
+          if I < lbProducts.Items.Count then
+            lbProducts.FocusItem := I
           else
           begin
-            lbApplications.FocusIndex := lbApplications.Items.Count-1;
-            I := lbApplications.FocusIndex;
+            lbProducts.FocusItem := lbProducts.Items.Count-1;
+            I := lbProducts.FocusItem;
           end;
 
           if (I > -1) then
           begin
             //btnEditApp.Enabled := True;
             //btnDelApp.Enabled := True;
-            edtBlockKey.Text := IniFile.ReadString(OgKeySection, lbApplications.Items[I], '');
+            edtBlockKey.Text := IniFile.ReadString(OgKeySection, lbProducts.Items[I], '');
             HexToBuffer(edtBlockKey.Text, FKey, SizeOf(FKey));
             edtBlockKey.Text := BufferToHex(FKey, SizeOf(FKey));
-            edtBytesKey.Text := BufferToHexBytes(FKey, SizeOf(FKey));
+            edtBytesBlockKey.Text := BufferToHexBytes(FKey, SizeOf(FKey));
             if HexStringIsZero(edtBlockKey.Text)then
               edtBlockKey.Text := '';
-            if HexStringIsZero(edtBytesKey.Text)then
-              edtBytesKey.Text := '';
+            if HexStringIsZero(edtBytesBlockKey.Text)then
+              edtBytesBlockKey.Text := '';
           end
           else
           begin
@@ -117,14 +123,14 @@ begin
             //btnDelApp.Enabled := False;
           end;
         finally
-          lbApplications.EndUpdate;
+          lbProducts.EndUpdate;
         end;
       finally
         IniFile.Free;
       end;
     end
     else
-      lbApplications.Items.Clear;
+      lbProducts.Items.Clear;
 
     //btnOK.Enabled := HexToBuffer(edtBlockKey.Text, FKey, SizeOf(FKey));
   except
@@ -135,6 +141,7 @@ end;
 
 procedure TKeyMaintForm.btnLoadClicked(Sender: TObject);
 begin
+  KeyFileName := edtFilename.FileName;
   InfoChanged(self);
 end;
 
@@ -148,15 +155,18 @@ var
   F: TProductMaintForm;
   IniFile: TIniFile;
 begin
-  F := TProductMaintForm.Create(Self);
+  Log('>> TKeyMaintForm.btnAddAppClicked', lsDebug);
+  F := TProductMaintForm.Create(nil);
   try
     F.SetKey(FKey);
     F.KeyType := FKeyType;
     F.ShowHint := ShowHint;
-    if F.ShowModal = mrOK then begin
+    Log('About to call TProductMaintForm.ShowModal', lsDebug);
+    if F.ShowModal = mrOK then
+    begin
       IniFile := TIniFile.Create(KeyFileName);
       try
-        IniFile.WriteString(OgKeySection, F.ProductEd.Text, F.KeyEd.Text);
+        IniFile.WriteString(OgKeySection, F.Product, F.KeyText);
       finally
         IniFile.Free;
       end;
@@ -168,16 +178,89 @@ begin
   end;
 
   InfoChanged(Self);
+  Log('<< TKeyMaintForm.btnAddAppClicked', lsDebug);
 end;
 
 procedure TKeyMaintForm.btnEditAppClicked(Sender: TObject);
+var
+  F: TProductMaintForm;
+  IniFile: TIniFile;
+  I: Integer;
 begin
+  Log('>> TKeyMaintForm.btnEditAppClicked', lsDebug);
+  I := lbProducts.FocusItem;
+  if (I = -1) then
+    Exit;
 
+  F := TProductMaintForm.Create(nil);
+  try
+    F.SetKey(FKey);
+    F.KeyType := FKeyType;
+//    F.ShowHint := ShowHint;
+    IniFile := TIniFile.Create(KeyFileName);
+    try
+      F.Product := lbProducts.Items[lbProducts.FocusItem];
+      F.KeyText := BufferToHex(FKey, SizeOf(FKey));
+      if F.ShowModal = mrOK then
+        IniFile.WriteString(OgKeySection, F.Product, F.KeyText);
+    finally
+      IniFile.Free;
+    end;
+  finally
+    F.Free;
+  end;
+
+  InfoChanged(Self);
+  Log('<< TKeyMaintForm.btnEditAppClicked', lsDebug);
 end;
 
 procedure TKeyMaintForm.btnDelAppClicked(Sender: TObject);
+var
+  IniFile: TIniFile;
+  I: Integer;
 begin
+  I := lbProducts.FocusItem;
+  if (I > -1) then
+  begin
+    if TfpgMessageDialog.Question('', SCDeleteQuery) = mbYes then
+    begin
+      IniFile := TIniFile.Create(KeyFileName);
+      try
+        IniFile.DeleteKey(OgKeySection, lbProducts.Items[I]);
+      finally
+        IniFile.Free;
+      end;
+      edtBlockKey.Text := '';
+      edtBytesBlockKey.Text := '';
 
+      InfoChanged(Self);
+    end;
+  end;
+end;
+
+procedure TKeyMaintForm.lbProductsClicked(Sender: TObject);
+var
+  I : Integer;
+  IniFile : TIniFile;
+begin
+  I := lbProducts.FocusItem;
+  if I < 0 then
+    Exit;
+  IniFile := TIniFile.Create(KeyFileName);
+  try
+    edtBlockKey.Text := IniFile.ReadString(OgKeySection, lbProducts.Items[I], '');
+    HexToBuffer(edtBlockKey.Text, FKey, SizeOf(FKey));
+    edtBlockKey.Text := BufferToHex(FKey, SizeOf(FKey));
+    edtBytesBlockKey.Text := BufferToHexBytes(FKey, SizeOf(FKey));
+  finally
+    IniFile.Free;
+  end;
+end;
+
+procedure TKeyMaintForm.lbProductsDblClicked(Sender: TObject; AButton: TMouseButton;
+    AShift: TShiftState; const AMousePos: TPoint);
+begin
+  ModalResult := mrOK;
 end;
 
 constructor TKeyMaintForm.Create(AOwner: TComponent);
@@ -229,7 +312,7 @@ begin
     SetPosition(8, 60, 272, 16);
     FontDesc := '#Label2';
     Hint := '';
-    Text := 'Applications';
+    Text := 'Products';
   end;
 
   btnAddApp := TfpgButton.Create(self);
@@ -244,6 +327,7 @@ begin
     ImageMargin := 0;
     ImageName := 'stdimg.add';
     TabOrder := 4;
+    OnClick := @btnAddAppClicked;
   end;
 
   btnEditApp := TfpgButton.Create(self);
@@ -258,6 +342,7 @@ begin
     ImageMargin := 0;
     ImageName := 'stdimg.edit';
     TabOrder := 5;
+    OnClick := @btnEditAppClicked;
   end;
 
   btnDelApp := TfpgButton.Create(self);
@@ -272,17 +357,20 @@ begin
     ImageMargin := 0;
     ImageName := 'stdimg.delete';
     TabOrder := 6;
+    OnClick := @btnDelAppClicked;
   end;
 
-  lbApplications := TfpgListBox.Create(self);
-  with lbApplications do
+  lbProducts := TfpgListBox.Create(self);
+  with lbProducts do
   begin
-    Name := 'lbApplications';
+    Name := 'lbProducts';
     SetPosition(24, 104, 388, 156);
     Anchors := [anLeft,anRight,anTop];
     FontDesc := '#List';
     Hint := '';
     TabOrder := 7;
+    OnClick  := @lbProductsClicked;
+    OnDoubleClick  := @lbProductsDblClicked;
   end;
 
   Label3 := TfpgLabel.Create(self);
@@ -366,14 +454,14 @@ begin
   {%endregion}
 end;
 
-procedure TKeyMaintForm.SetKey(Value: TKey);
+procedure TKeyMaintForm.SetKey(AValue: TKey);
 begin
-
+  FKey := AValue;
 end;
 
 procedure TKeyMaintForm.GetKey(var AValue: TKey);
 begin
-
+  AValue := FKey;
 end;
 
 

@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, fpg_base, fpg_main, fpg_form, fpg_label, fpg_button,
-  fpg_memo, fpg_combobox, ogutil, onguard;
+  fpg_memo, fpg_combobox, fpg_edit, ogutil, onguard;
 
 type
 
@@ -67,8 +67,8 @@ end;
 
 procedure TKeyGenerateForm.cbKeyTypeChanged(Sender: TObject);
 begin
-  edBlockKey.Text := '';
-  edByteBlockKey.Text := '';
+  edtBlockKey.Text := '';
+  edtByteBlockKey.Text := '';
 
   {set state of memo and generate button}
   //memKeyPhrase.Enabled := (cbKeyType.FocusItem <> 0);
@@ -88,7 +88,7 @@ begin
   edtByteBlockKey.Text := '';
 
   {set state of generate button}
-  btnGenerateKey.Enabled := (cbKeyType.FocusItem = 0) or (meKeyPhrase.Lines.Count > 0);
+  btnGenerateKey.Enabled := (cbKeyType.FocusItem = 0) or (memKeyPhrase.Lines.Count > 0);
 end;
 
 procedure TKeyGenerateForm.btnGenerateKeyClicked(Sender: TObject);
@@ -130,7 +130,6 @@ begin
   SetPosition(655, 180, 425, 235);
   WindowTitle := 'KeyGenerateForm';
   Hint := '';
-  ShowHint := False;
   MinHeight := 235;
   MinWidth := 400;
 
@@ -170,6 +169,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
+    ModalResult := mrOK;
     TabOrder := 3;
   end;
 
@@ -183,6 +183,7 @@ begin
     FontDesc := '#Label1';
     Hint := '';
     ImageName := '';
+    ModalResult := mrCancel;
     TabOrder := 4;
   end;
 
@@ -197,6 +198,7 @@ begin
     Hint := '';
     ImageName := '';
     TabOrder := 5;
+    OnClick := @btnGenerateKeyClicked;
   end;
 
   Label2 := TfpgLabel.Create(self);

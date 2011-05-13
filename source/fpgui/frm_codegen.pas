@@ -47,7 +47,7 @@ type
     GroupBox2: TfpgGroupBox;
     btnGenerate: TfpgButton;
     Edit4: TfpgEdit;
-    Button2: TfpgButton;
+    btnCopyToClipboard: TfpgButton;
     {@VFD_HEAD_END: CodeGenerationForm}
     FCode: TCode;
     FCodeType: TCodeType;
@@ -84,9 +84,9 @@ uses
 
 procedure TCodeGenerationForm.SetCodeType(const AValue: TCodeType);
 begin
-  if Value <> TCodeType(pgCodes.ActivePageIndex) then
+  if AValue <> TCodeType(pgCodes.ActivePageIndex) then
   begin
-    FCodeType := Value;
+    FCodeType := AValue;
     pgCodes.ActivePageIndex := Ord(FCodeType);
   end;
 end;
@@ -118,7 +118,7 @@ end;
 
 procedure TCodeGenerationForm.FormShow(Sender: TObject);
 begin
-  OGMCheck;
+//  OGMCheck;
 end;
 
 procedure TCodeGenerationForm.InfoChanged(Sender: TObject);
@@ -131,7 +131,7 @@ procedure TCodeGenerationForm.btnGenerateKeyClicked(Sender: TObject);
 var
   F: TKeyMaintForm;
 begin
-  F := TKeyMaintForm.Create(Self);
+  F := TKeyMaintForm.Create(nil);
   try
     F.SetKey(FKey);
     F.KeyType := FKeyType;
@@ -140,9 +140,9 @@ begin
     if F.ShowModal = mrOK then
     begin
       F.GetKey(FKey);
-      BlockKeyEd.Text := BufferToHex(FKey, SizeOf(FKey));
-      if HexStringIsZero(BlockKeyEd.Text)then
-        BlockKeyEd.Text := '';
+      edtBlockKey.Text := BufferToHex(FKey, SizeOf(FKey));
+      if HexStringIsZero(edtBlockKey.Text)then
+        edtBlockKey.Text := '';
       FKeyType := F.KeyType;
       FKeyFileName := F.KeyFileName;
       InfoChanged(Self);
@@ -159,7 +159,7 @@ begin
   if not HexToBuffer(edtBlockKey.Text, FKey, SizeOf(FKey)) then
   begin
     {get a key}
-    F := TKeyMaintForm.Create(Self);
+    F := TKeyMaintForm.Create(nil);
     try
       F.SetKey(FKey);
       F.KeyType := ktRandom;
@@ -168,9 +168,9 @@ begin
       if F.ShowModal = mrOK then
       begin
         F.GetKey(FKey);
-        BlockKeyEd.Text := BufferToHex(FKey, SizeOf(FKey));
-        if HexStringIsZero(BlockKeyEd.Text) then
-          BlockKeyEd.Text := '';
+        edtBlockKey.Text := BufferToHex(FKey, SizeOf(FKey));
+        if HexStringIsZero(edtBlockKey.Text) then
+          edtBlockKey.Text := '';
         FKeyFileName := F.KeyFileName;
         InfoChanged(Self);
       end
@@ -202,6 +202,7 @@ begin
   SetPosition(714, 208, 490, 478);
   WindowTitle := 'Code Generation';
   Hint := '';
+  ShowHint := True;
 
   btnOK := TfpgButton.Create(self);
   with btnOK do
@@ -577,15 +578,15 @@ begin
     Text := '';
   end;
 
-  Button2 := TfpgButton.Create(GroupBox2);
-  with Button2 do
+  btnCopyToClipboard := TfpgButton.Create(GroupBox2);
+  with btnCopyToClipboard do
   begin
-    Name := 'Button2';
+    Name := 'btnCopyToClipboard';
     SetPosition(444, 28, 24, 24);
     Text := 'C';
     Flat := True;
     FontDesc := '#Label1';
-    Hint := '';
+    Hint := 'Copy to clipboard';
     ImageName := '';
     TabOrder := 3;
   end;
