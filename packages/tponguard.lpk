@@ -2,15 +2,21 @@
 <CONFIG>
   <Package Version="3">
     <Name Value="tponguard"/>
+    <AddToProjectUsesSection Value="False"/>
     <Author Value="TurboPower Software Company"/>
     <CompilerOptions>
-      <Version Value="8"/>
+      <Version Value="9"/>
       <SearchPaths>
-        <IncludeFiles Value="../source/"/>
-        <OtherUnitFiles Value="../source/"/>
+        <IncludeFiles Value="../source"/>
+        <OtherUnitFiles Value="../source"/>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
-        <SrcPath Value="../source/"/>
+        <SrcPath Value="../source"/>
       </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
       <Other>
         <CompilerPath Value="$(CompPath)"/>
       </Other>
@@ -58,11 +64,12 @@ Ports :   Andrew Haines (Kylix version), Bogusław Brandys (FPC/Lazarus), Graeme
       </Item1>
     </RequiredPkgs>
     <UsageOptions>
-      <UnitPath Value="$(PkgOutDir)/"/>
+      <UnitPath Value="$(PkgOutDir)"/>
     </UsageOptions>
     <PublishOptions>
       <Version Value="2"/>
       <IgnoreBinaries Value="False"/>
     </PublishOptions>
+    <Provides Count="1"/>
   </Package>
 </CONFIG>
