@@ -43,10 +43,10 @@ type
     edtModifier: TfpgEdit;
     Label2: TfpgLabel;
     edtBlockKey: TfpgEdit;
-    btnGenKey: TfpgButton;
+    btnKeyMaint: TfpgButton;
     GroupBox2: TfpgGroupBox;
     btnGenerate: TfpgButton;
-    Edit4: TfpgEdit;
+    edtRegCode: TfpgEdit;
     btnCopyToClipboard: TfpgButton;
     {@VFD_HEAD_END: CodeGenerationForm}
     FCode: TCode;
@@ -58,7 +58,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure InfoChanged(Sender: TObject);
-    procedure btnGenerateKeyClicked(Sender: TObject);
+    procedure btnKeyMaintClicked(Sender: TObject);
+    procedure btnGenerateClicked(Sender: TObject);
     procedure OGMCheck;
     procedure OGMQuit;
   public
@@ -78,6 +79,8 @@ implementation
 
 uses
   ogutil,
+  ogconst,
+  fpg_dialogs,
   frm_keymaint;
 
 {@VFD_NEWFORM_IMPL}
@@ -127,7 +130,7 @@ begin
  // OKBtn.Enabled := Length(RegCodeEd.Text) > 0;
 end;
 
-procedure TCodeGenerationForm.btnGenerateKeyClicked(Sender: TObject);
+procedure TCodeGenerationForm.btnKeyMaintClicked(Sender: TObject);
 var
   F: TKeyMaintForm;
 begin
@@ -150,6 +153,115 @@ begin
   finally
     F.Free;
   end;
+end;
+
+procedure TCodeGenerationForm.btnGenerateClicked(Sender: TObject);
+var
+  I: LongInt;
+  Work: TCode;
+  K: TKey;
+  Modifier: LongInt;
+  D1, D2: TDateTime;
+begin
+  Modifier := 0;
+  if ((edtModifier.Text = '') or HexToBuffer(edtModifier.Text, Modifier, SizeOf(LongInt))) then
+  begin
+    K := FKey;
+    ApplyModifierToKeyPrim(Modifier, K, SizeOf(K));
+
+    case pgCodes.ActivePageIndex of
+      0 : begin
+            D1 := calDateStart.DateValue;
+            D2 := calDateEnd.DateValue;
+
+            InitDateCode(K, Trunc(D1), Trunc(D2), FCode);
+            Work := FCode;
+            MixBlock(T128bit(K), Work, False);
+
+            {sanity check}
+            calDateStart.DateValue := Work.FirstDate+BaseDate;
+            calDateEnd.DateValue := Work.EndDate+BaseDate;
+            //StartDateEd.Text := OgFormatDate(Work.FirstDate+BaseDate);
+            //EndDateEd.Text := OgFormatDate(Work.EndDate+BaseDate);
+          end;
+      1 : begin
+            //try
+            //  D1 := StrToDate(DaysExpiresEd.Text);
+            //except
+            //  on EConvertError do begin
+            //    ShowMessage(SCInvalidExDate);
+            //    DaysExpiresEd.SetFocus;
+            //    Exit;
+            //  end else
+            //    raise;
+            //end;
+            //InitDaysCode(K, StrToIntDef(DaysCountEd.Text, 0), D1, FCode);
+          end;
+      2 : begin
+            //try
+            //  D1 := StrToDate(RegExpiresEd.Text);
+            //except
+            //  on EConvertError do begin
+            //    ShowMessage(SCInvalidExDate);
+            //    RegExpiresEd.SetFocus;
+            //    Exit;
+            //  end else
+            //    raise;
+            //end;
+            //InitRegCode(K, RegStrEd.Text, D1, FCode);
+          end;
+      3 : begin
+            //try
+            //  D1 := StrToDate(SerialExpiresEd.Text);
+            //except
+            //  on EConvertError do begin
+            //    ShowMessage(SCInvalidExDate);
+            //    SerialExpiresEd.SetFocus;
+            //    Exit;
+            //  end else
+            //    raise;
+            //end;
+            //InitSerialNumberCode(K, StrToIntDef(SerialNumberEd.Text, 0), D1, FCode);
+          end;
+      4 : begin
+            //try
+            //  D1 := StrToDate(UsageExpiresEd.Text);
+            //except
+            //  on EConvertError do begin
+            //    ShowMessage(SCInvalidExDate);
+            //    UsageExpiresEd.SetFocus;
+            //    Exit;
+            //  end else
+            //    raise;
+            //end;
+            //InitUsageCode(K, StrToIntDef(UsageCountEd.Text, 0), D1, FCode);
+          end;
+      5 : begin
+            //I := StrToIntDef(NetworkSlotsEd.Text, 2);
+            //if I < 1 then
+            //  I := 1;
+            //NetworkSlotsEd.Text := IntToStr(I);
+            //EncodeNAFCountCode(K, I, FCode);
+          end;
+      6 : begin
+            //try
+            //  D1 := StrToDate(SpecialExpiresEd.Text);
+            //except
+            //  on EConvertError do begin
+            //    ShowMessage(SCInvalidExDate);
+            //    SpecialExpiresEd.SetFocus;
+            //    Exit;
+            //  end else
+            //    raise;
+            //end;
+            //InitSpecialCode(K, StrToIntDef(SpecialDataEd.Text, 0), D1, FCode);
+          end;
+    end;
+
+    edtRegCode.Text := BufferToHex(FCode, SizeOf(FCode));
+  end
+  else
+    TfpgMessageDialog.Critical('', SCInvalidKeyOrModifier);
 end;
 
 procedure TCodeGenerationForm.OGMCheck;
@@ -326,6 +438,7 @@ begin
     HolidayColor := TfpgColor($000000);
     SelectedColor := TfpgColor($000000);
     TabOrder := 2;
+    SingleClickSelect := True;
   end;
 
   lblDateEnd := TfpgLabel.Create(tsDate);
@@ -351,6 +464,7 @@ begin
     HolidayColor := TfpgColor($000000);
     SelectedColor := TfpgColor($000000);
     TabOrder := 4;
+    SingleClickSelect := True;
   end;
 
   lblDaysCount := TfpgLabel.Create(tsDays);
@@ -462,6 +576,7 @@ begin
     HolidayColor := TfpgColor($000000);
     SelectedColor := TfpgColor($000000);
     TabOrder := 5;
+    SingleClickSelect := True;
   end;
 
   cbxStringModifier := TfpgCheckBox.Create(GroupBox1);
@@ -531,10 +646,10 @@ begin
     Text := '';
   end;
 
-  btnGenKey := TfpgButton.Create(GroupBox1);
-  with btnGenKey do
+  btnKeyMaint := TfpgButton.Create(GroupBox1);
+  with btnKeyMaint do
   begin
-    Name := 'btnGenKey';
+    Name := 'btnKeyMaint';
     SetPosition(444, 176, 24, 24);
     Text := 'K';
     Flat := True;
@@ -542,6 +657,7 @@ begin
     Hint := '';
     ImageName := '';
     TabOrder := 12;
+    OnClick  := @btnKeyMaintClicked;
   end;
 
   GroupBox2 := TfpgGroupBox.Create(self);
@@ -564,12 +680,13 @@ begin
     Hint := '';
     ImageName := '';
     TabOrder := 1;
+    OnClick := @btnGenerateClicked;
   end;
 
-  Edit4 := TfpgEdit.Create(GroupBox2);
-  with Edit4 do
+  edtRegCode := TfpgEdit.Create(GroupBox2);
+  with edtRegCode do
   begin
-    Name := 'Edit4';
+    Name := 'edtRegCode';
     SetPosition(96, 28, 340, 24);
     ExtraHint := '';
     FontDesc := '#Edit1';
