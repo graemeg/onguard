@@ -36,9 +36,9 @@ type
     cbxMachineModifier: TfpgCheckBox;
     cbxUniqueModifier: TfpgCheckBox;
     cbxDateModifier: TfpgCheckBox;
-    calModifier: TfpgCalendarCombo;
+    calModDate: TfpgCalendarCombo;
     cbxStringModifier: TfpgCheckBox;
-    Edit1: TfpgEdit;
+    edtModString: TfpgEdit;
     Label1: TfpgLabel;
     edtModifier: TfpgEdit;
     Label2: TfpgLabel;
@@ -48,29 +48,37 @@ type
     btnGenerate: TfpgButton;
     edtRegCode: TfpgEdit;
     btnCopyToClipboard: TfpgButton;
+    Label3: TfpgLabel;
+    edtSerialNumber: TfpgEdit;
+    btnSerialRandom: TfpgButton;
+    Label4: TfpgLabel;
+    calSerialExpires: TfpgCalendarCombo;
     {@VFD_HEAD_END: CodeGenerationForm}
     FCode: TCode;
     FCodeType: TCodeType;
     FKey: TKey;
     FKeyType: TKeyType;
     FKeyFileName: string;
-    procedure SetCodeType(const AValue: TCodeType);
-    procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure InfoChanged(Sender: TObject);
-    procedure btnKeyMaintClicked(Sender: TObject);
-    procedure btnGenerateClicked(Sender: TObject);
-    procedure OGMCheck;
-    procedure OGMQuit;
+    procedure   SetCodeType(const AValue: TCodeType);
+    procedure   FormCreate(Sender: TObject);
+    procedure   FormShow(Sender: TObject);
+    procedure   InfoChanged(Sender: TObject);
+    procedure   btnKeyMaintClicked(Sender: TObject);
+    procedure   btnGenerateClicked(Sender: TObject);
+    procedure   pgCodeChanged(Sender: TObject; NewActiveSheet: TfpgTabSheet);
+    procedure   ModifierChanged(Sender: TObject);
+    procedure   btnSerialRandomClicked(Sender: TObject);
+    procedure   OGMCheck;
+    procedure   OGMQuit;
   public
     constructor Create(AOwner: TComponent); override;
-    procedure AfterCreate; override;
-    procedure SetKey(Value: TKey);
-    procedure GetKey(var Value: TKey);
-    property  Code: TCode read FCode;
-    property  CodeType: TCodeType read FCodeType write SetCodeType;
-    property  KeyFileName: string read FKeyFileName write FKeyFileName;
-    property  KeyType: TKeyType read FKeyType write FKeyType;
+    procedure   AfterCreate; override;
+    procedure   SetKey(Value: TKey);
+    procedure   GetKey(var Value: TKey);
+    property    Code: TCode read FCode;
+    property    CodeType: TCodeType read FCodeType write SetCodeType;
+    property    KeyFileName: string read FKeyFileName write FKeyFileName;
+    property    KeyType: TKeyType read FKeyType write FKeyType;
   end;
 
 {@VFD_NEWFORM_DECL}
@@ -98,7 +106,6 @@ procedure TCodeGenerationForm.FormCreate(Sender: TObject);
 var
   D: TDateTime;
 begin
-  cbxNoModifier.Checked := True;
   pgCodes.ActivePageIndex := Ord(FCodeType);
   edtBlockKey.Text := BufferToHex(FKey, SizeOf(FKey));
   if HexStringIsZero(edtBlockKey.Text)then
@@ -107,12 +114,12 @@ begin
   {initialize date edits}
   calDateStart.DateValue := Date;
   calDateEnd.DateValue := Date;
-  calModifier.DateValue := Date;
+  calModDate.DateValue := Date;
 
   D := EncodeDate(9999,12,31);
   //UsageExpiresEd.Text := OgFormatDate(D);
   //SpecialExpiresEd.Text := OgFormatDate(D);
-  //SerialExpiresEd.Text := OgFormatDate(D);
+  calSerialExpires.DateValue := D;
   //RegExpiresEd.Text := OgFormatDate(D);
   //DaysExpiresEd.Text := OgFormatDate(D);
 
@@ -121,6 +128,7 @@ end;
 
 procedure TCodeGenerationForm.FormShow(Sender: TObject);
 begin
+  cbxNoModifier.Checked := True;
 //  OGMCheck;
 end;
 
@@ -211,17 +219,8 @@ begin
             //InitRegCode(K, RegStrEd.Text, D1, FCode);
           end;
       3 : begin
-            //try
-            //  D1 := StrToDate(SerialExpiresEd.Text);
-            //except
-            //  on EConvertError do begin
-            //    ShowMessage(SCInvalidExDate);
-            //    SerialExpiresEd.SetFocus;
-            //    Exit;
-            //  end else
-            //    raise;
-            //end;
-            //InitSerialNumberCode(K, StrToIntDef(SerialNumberEd.Text, 0), D1, FCode);
+            D1 := calSerialExpires.DateValue;
+            InitSerialNumberCode(K, StrToIntDef(edtSerialNumber.Text, 0), D1, FCode);
           end;
       4 : begin
             //try
@@ -262,6 +261,127 @@ begin
   end
   else
     TfpgMessageDialog.Critical('', SCInvalidKeyOrModifier);
+end;
+
+procedure TCodeGenerationForm.pgCodeChanged(Sender: TObject; NewActiveSheet: TfpgTabSheet);
+begin
+  edtRegCode.Text := '';
+  cbxNoModifier.Checked := True;
+  edtModifier.Text := '';
+end;
+
+procedure TCodeGenerationForm.ModifierChanged(Sender: TObject);
+const
+  Busy: Boolean = False;
+var
+  L: LongInt;
+  D: TDateTime;
+  S: string;
+  i: Integer;
+begin
+  if Busy then
+    Exit;
+
+  {set busy flag so that setting "Checked" won't recurse}
+  Busy := True;
+  try
+    L := 0;
+
+    if (Sender = cbxNoModifier) and cbxNoModifier.Checked then
+    begin
+      cbxUniqueModifier.Checked := False;
+      cbxMachineModifier.Checked := False;
+      cbxDateModifier.Checked := False;
+      cbxStringModifier.Checked := False;
+      edtModifier.ReadOnly := True;
+    end
+    else
+    begin
+      cbxNoModifier.Checked := False;
+      edtModifier.ReadOnly := False;
+    end;
+
+(*
+    if not UniqueModifierCb.Checked and
+       not MachineModifierCb.Checked and
+       not DateModifierCb.Checked and
+       not StringModifierCb.Checked and                              {!!.11}
+       (ModifierEd.Text = '') then begin                             {!!.11}
+      NoModifierCb.Checked := True;
+      ModifierEd.Color := clBtnFace;                                 {!!.11}
+      ModifierEd.ReadOnly := True;                                   {!!.11}
+    end;
+*)
+    if cbxMachineModifier.Checked then
+    begin
+      if L = 0 then
+        L := GenerateMachineModifierPrim
+      else
+        L := L xor GenerateMachineModifierPrim;
+    end;
+
+    {set status of string field}
+    edtModString.Enabled := cbxStringModifier.Checked;
+    //if edtModString.Enabled then
+    //  ModStringEd.Color := clWindow
+    //else
+    //  ModStringEd.Color := clBtnFace;
+
+    if cbxStringModifier.Checked then
+    begin
+      S := edtModString.Text;
+      {strip accented characters from the string}
+      for i := Length(S) downto 1 do
+        if Ord(S[i]) > 127 then
+          Delete(S, i, 1);
+      L := StringHashELF(S);
+    end;
+
+    {set status of date field}
+    calModDate.Enabled := cbxDateModifier.Checked;
+    //if ModDateEd.Enabled then
+    //  ModDateEd.Color := clWindow
+    //else
+    //  ModDateEd.Color := clBtnFace;
+
+    if cbxDateModifier.Checked then
+    begin
+      D := calModDate.DateValue;
+      if Trunc(D) <> 0 then
+      begin
+        if L = 0 then
+          L := GenerateDateModifierPrim(D)
+        else
+          L := L xor GenerateDateModifierPrim(D);
+      end;
+    end;
+
+    if cbxUniqueModifier.Checked then
+    begin
+      if L = 0 then
+        L := GenerateUniqueModifierPrim
+      else
+        L := L xor GenerateUniqueModifierPrim;
+    end;
+
+    if L = 0 then
+      edtModifier.Text := ''
+    else
+      edtModifier.Text := '$' + BufferToHex(L, 4);
+  finally
+    Busy := False;
+  end;
+end;
+
+procedure TCodeGenerationForm.btnSerialRandomClicked(Sender: TObject);
+var
+  I: Integer;
+  L: LongInt;
+  Bytes: array[0..3] of Byte absolute L;
+begin
+  for I := 0 to 3 do
+    Bytes[I] := Random(256);
+  edtSerialNumber.Text := IntToHex(L, 8);
 end;
 
 procedure TCodeGenerationForm.OGMCheck;
@@ -350,6 +470,7 @@ begin
     Anchors := [anLeft,anRight,anTop];
     Hint := '';
     TabOrder := 3;
+    OnChange  := @pgCodeChanged;
   end;
 
   tsDate := TfpgTabSheet.Create(pgCodes);
@@ -412,7 +533,7 @@ begin
     Name := 'tsSpecial';
     SetPosition(3, 24, 476, 81);
     Anchors := [anLeft,anRight,anTop,anBottom];
-    Text := 'tsSpecial';
+    Text := 'Special';
   end;
 
   lblDateStart := TfpgLabel.Create(tsDate);
@@ -528,6 +649,7 @@ begin
     Hint := '';
     TabOrder := 1;
     Text := 'No modifier';
+    OnChange  := @ModifierChanged;
   end;
 
   cbxMachineModifier := TfpgCheckBox.Create(GroupBox1);
@@ -539,6 +661,7 @@ begin
     Hint := '';
     TabOrder := 2;
     Text := 'Machine modifier';
+    OnChange  := @ModifierChanged;
   end;
 
   cbxUniqueModifier := TfpgCheckBox.Create(GroupBox1);
@@ -550,6 +673,7 @@ begin
     Hint := '';
     TabOrder := 3;
     Text := 'Unique modifier';
+    OnChange  := @ModifierChanged;
   end;
 
   cbxDateModifier := TfpgCheckBox.Create(GroupBox1);
@@ -561,12 +685,13 @@ begin
     Hint := '';
     TabOrder := 4;
     Text := 'Date modifier';
+    OnChange  := @ModifierChanged;
   end;
 
-  calModifier := TfpgCalendarCombo.Create(GroupBox1);
-  with calModifier do
+  calModDate := TfpgCalendarCombo.Create(GroupBox1);
+  with calModDate do
   begin
-    Name := 'calModifier';
+    Name := 'calModDate';
     SetPosition(140, 44, 120, 24);
     BackgroundColor := TfpgColor($80000002);
     DateFormat := 'yyyy-mm-dd';
@@ -577,6 +702,7 @@ begin
     SelectedColor := TfpgColor($000000);
     TabOrder := 5;
     SingleClickSelect := True;
+    OnChange := @ModifierChanged;
   end;
 
   cbxStringModifier := TfpgCheckBox.Create(GroupBox1);
@@ -588,18 +714,20 @@ begin
     Hint := '';
     TabOrder := 6;
     Text := 'String Modifier';
+    OnChange  := @ModifierChanged;
   end;
 
-  Edit1 := TfpgEdit.Create(GroupBox1);
-  with Edit1 do
+  edtModString := TfpgEdit.Create(GroupBox1);
+  with edtModString do
   begin
-    Name := 'Edit1';
+    Name := 'edtModString';
     SetPosition(140, 72, 332, 24);
     ExtraHint := '';
     FontDesc := '#Edit1';
     Hint := '';
     TabOrder := 7;
     Text := '';
+    OnChange := @ModifierChanged;
   end;
 
   Label1 := TfpgLabel.Create(GroupBox1);
@@ -708,8 +836,72 @@ begin
     TabOrder := 3;
   end;
 
+  Label3 := TfpgLabel.Create(tsSerialNo);
+  with Label3 do
+  begin
+    Name := 'Label3';
+    SetPosition(8, 8, 108, 16);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Serial Number:';
+  end;
+
+  edtSerialNumber := TfpgEdit.Create(tsSerialNo);
+  with edtSerialNumber do
+  begin
+    Name := 'edtSerialNumber';
+    SetPosition(120, 4, 120, 24);
+    ExtraHint := '';
+    FontDesc := '#Edit1';
+    Hint := '';
+    TabOrder := 2;
+    Text := '';
+  end;
+
+  btnSerialRandom := TfpgButton.Create(tsSerialNo);
+  with btnSerialRandom do
+  begin
+    Name := 'btnSerialRandom';
+    SetPosition(8, 40, 116, 24);
+    Text := 'Random Number';
+    FontDesc := '#Label1';
+    Hint := '';
+    ImageName := '';
+    TabOrder := 3;
+    OnClick := @btnSerialRandomClicked;
+  end;
+
+  Label4 := TfpgLabel.Create(tsSerialNo);
+  with Label4 do
+  begin
+    Name := 'Label4';
+    SetPosition(256, 8, 60, 16);
+    FontDesc := '#Label1';
+    Hint := '';
+    Text := 'Expires:';
+  end;
+
+  calSerialExpires := TfpgCalendarCombo.Create(tsSerialNo);
+  with calSerialExpires do
+  begin
+    Name := 'calSerialExpires';
+    SetPosition(316, 4, 120, 24);
+    BackgroundColor := TfpgColor($80000002);
+    DateFormat := 'yyyy-mm-dd';
+    DayColor := TfpgColor($000000);
+    FontDesc := '#List';
+    Hint := '';
+    HolidayColor := TfpgColor($000000);
+    SelectedColor := TfpgColor($000000);
+    TabOrder := 5;
+  end;
+
   {@VFD_BODY_END: CodeGenerationForm}
   {%endregion}
+
+  { Simply to setup some of those component state, now that all the event
+    handlers have been hooked up. }
+//  ModifierChanged(cbxNoModifier);
 end;
 
 procedure TCodeGenerationForm.SetKey(Value: TKey);
@@ -725,5 +917,8 @@ begin
   Value := FKey;
 end;
 
+
+initialization
+  Randomize;
 
 end.
