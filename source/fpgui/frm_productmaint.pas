@@ -45,8 +45,11 @@ type
 implementation
 
 uses
-  frm_keygen,
-  tiLog;
+  frm_keygen
+  {$IFDEF GDEBUG}
+  ,tiLog
+  {$ENDIF}
+  ;
 
 {@VFD_NEWFORM_IMPL}
 
@@ -54,21 +57,21 @@ procedure TProductMaintForm.InfoChanged(Sender: TObject);
 var
   Work: TKey;
 begin
-  Log('>> TProductMaintForm.InfoChanged', lsDebug);
+  {$IFDEF GDEBUG} Log('>> TProductMaintForm.InfoChanged', lsDebug); {$ENDIF}
   {$HINTS OFF}
   FillChar(Work, SizeOf(Work), 0); // Fill array with zeros
   {$HINTS ON}
 
-  btnOK.Enabled := (Length(edtProduct.Text) > 0) and (Length(edtKey.Text) > 0);
-  //(HexToBuffer(edtKey.Text, Work, SizeOf(Work)));
-  Log('<< TProductMaintForm.InfoChanged', lsDebug);
+//  btnOK.Enabled := (Length(edtProduct.Text) > 0) and (Length(edtKey.Text) > 0);
+  btnOK.Enabled := (Length(edtProduct.Text) > 0) and (HexToBuffer(edtKey.Text, Work, SizeOf(Work)));
+  {$IFDEF GDEBUG} Log('<< TProductMaintForm.InfoChanged', lsDebug); {$ENDIF}
 end;
 
 procedure TProductMaintForm.FormShow(Sender: TObject);
 begin
-  Log('>> TProductMaintForm.FormShow', lsDebug);
+  {$IFDEF GDEBUG} Log('>> TProductMaintForm.FormShow', lsDebug); {$ENDIF}
   InfoChanged(self);
-  Log('<< TProductMaintForm.FormShow', lsDebug);
+  {$IFDEF GDEBUG} Log('<< TProductMaintForm.FormShow', lsDebug); {$ENDIF}
 end;
 
 procedure TProductMaintForm.btnGenerateKeyClicked(Sender: TObject);
@@ -121,10 +124,8 @@ end;
 
 constructor TProductMaintForm.Create(AOwner: TComponent);
 begin
-  Log('>> TProductMaintForm.Create', lsDebug);
   inherited Create(AOwner);
   OnShow := @FormShow;
-  Log('<< TProductMaintForm.Create', lsDebug);
 end;
 
 procedure TProductMaintForm.AfterCreate;

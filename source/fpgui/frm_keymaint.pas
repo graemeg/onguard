@@ -58,8 +58,11 @@ uses
   ogutil,
   IniFiles,
   fpg_dialogs,
-  frm_productmaint,
-  tiLog;
+  frm_productmaint
+  {$IFDEF GDEBUG}
+  ,tiLog
+  {$ENDIF}
+  ;
 
 {@VFD_NEWFORM_IMPL}
 
@@ -155,13 +158,14 @@ var
   F: TProductMaintForm;
   IniFile: TIniFile;
 begin
+  {$IFDEF GDEBUG}
   Log('>> TKeyMaintForm.btnAddAppClicked', lsDebug);
+  {$ENDIF}
   F := TProductMaintForm.Create(nil);
   try
     F.SetKey(FKey);
     F.KeyType := FKeyType;
     F.ShowHint := ShowHint;
-    Log('About to call TProductMaintForm.ShowModal', lsDebug);
     if F.ShowModal = mrOK then
     begin
       IniFile := TIniFile.Create(KeyFileName);
@@ -178,7 +182,9 @@ begin
   end;
 
   InfoChanged(Self);
+  {$IFDEF GDEBUG}
   Log('<< TKeyMaintForm.btnAddAppClicked', lsDebug);
+  {$ENDIF}
 end;
 
 procedure TKeyMaintForm.btnEditAppClicked(Sender: TObject);
@@ -187,7 +193,9 @@ var
   IniFile: TIniFile;
   I: Integer;
 begin
+  {$IFDEF GDEBUG}
   Log('>> TKeyMaintForm.btnEditAppClicked', lsDebug);
+  {$ENDIF}
   I := lbProducts.FocusItem;
   if (I = -1) then
     Exit;
@@ -211,7 +219,9 @@ begin
   end;
 
   InfoChanged(Self);
+  {$IFDEF GDEBUG}
   Log('<< TKeyMaintForm.btnEditAppClicked', lsDebug);
+  {$ENDIF}
 end;
 
 procedure TKeyMaintForm.btnDelAppClicked(Sender: TObject);
@@ -274,11 +284,11 @@ begin
   {%region 'Auto-generated GUI code' -fold}
   {@VFD_BODY_BEGIN: KeyMaintForm}
   Name := 'KeyMaintForm';
-  SetPosition(673, 170, 422, 402);
+  SetPosition(673, 170, 495, 402);
   WindowTitle := 'Key Maintenance';
   Hint := '';
   ShowHint := True;
-  MinWidth := 380;
+  MinWidth := 470;
   MinHeight := 400;
 
   Label1 := TfpgLabel.Create(self);
@@ -295,7 +305,7 @@ begin
   with edtFilename do
   begin
     Name := 'edtFilename';
-    SetPosition(24, 28, 304, 24);
+    SetPosition(24, 28, 377, 24);
     Anchors := [anLeft,anRight,anTop];
     ExtraHint := '';
     FileName := 'onguard.ini';
@@ -364,7 +374,7 @@ begin
   with lbProducts do
   begin
     Name := 'lbProducts';
-    SetPosition(24, 104, 388, 156);
+    SetPosition(24, 104, 461, 156);
     Anchors := [anLeft,anRight,anTop];
     FontDesc := '#List';
     Hint := '';
@@ -387,7 +397,7 @@ begin
   with edtBlockKey do
   begin
     Name := 'edtBlockKey';
-    SetPosition(24, 292, 388, 24);
+    SetPosition(24, 292, 461, 24);
     Anchors := [anLeft,anRight,anTop];
     ExtraHint := '';
     FontDesc := '#Edit1';
@@ -400,7 +410,7 @@ begin
   with edtBytesBlockKey do
   begin
     Name := 'edtBytesBlockKey';
-    SetPosition(24, 320, 388, 24);
+    SetPosition(24, 320, 461, 24);
     Anchors := [anLeft,anRight,anTop];
     ExtraHint := '';
     FontDesc := '#Edit1';
@@ -413,7 +423,7 @@ begin
   with btnOK do
   begin
     Name := 'btnOK';
-    SetPosition(248, 368, 80, 24);
+    SetPosition(321, 368, 80, 24);
     Anchors := [anRight,anBottom];
     Text := 'OK';
     FontDesc := '#Label1';
@@ -427,7 +437,7 @@ begin
   with btnCancel do
   begin
     Name := 'btnCancel';
-    SetPosition(332, 368, 80, 24);
+    SetPosition(405, 368, 80, 24);
     Anchors := [anRight,anBottom];
     Text := 'Cancel';
     FontDesc := '#Label1';
@@ -441,7 +451,8 @@ begin
   with btnLoadFile do
   begin
     Name := 'btnLoadFile';
-    SetPosition(332, 28, 80, 24);
+    SetPosition(405, 28, 80, 24);
+    Anchors := [anRight,anTop];
     Text := 'Load';
     FontDesc := '#Label1';
     Hint := '';
