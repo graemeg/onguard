@@ -953,56 +953,6 @@ begin
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
 {$ELSE}
-{$IFNDEF LINUX}
-function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
-var
-  I       : DWord;
-  RegKey  : DWord;
-  GUID1   : TGUID;
-  GUID2   : TGUID;
-  Drive   : Integer;
-  Context : TTMDContext;
-  Buf     : array [0..1023] of Byte;
-begin
-  InitTMD(Context);
-
-  {no user (midUser) information under Win16}
-
-  if midSystem in MachineInfo then begin
-    {include system specific information}
-    I := GetWindowsDirectory(@Buf, SizeOf(Buf));
-    UpdateTMD(Context, Buf, I);
-    I := GetSystemDirectory(@Buf, SizeOf(Buf));
-    UpdateTMD(Context, Buf, I);
-
-    PLongInt(@Buf[0])^ := GetWinFlags;
-    PLongInt(@Buf[4])^ := WinProcs.GetVersion;
-    UpdateTMD(Context, Buf, 8);
-  end;
-
-  if midNetwork in MachineInfo then begin
-    {include network ID}
-    CreateGuid(GUID1);
-    CreateGuid(GUID2);
-    {check to see if "network" ID is available}
-    if (GUID1.Data4[2] = GUID2.Data4[2]) and
-       (GUID1.Data4[3] = GUID2.Data4[3]) and
-       (GUID1.Data4[4] = GUID2.Data4[4]) and
-       (GUID1.Data4[5] = GUID2.Data4[5]) and
-       (GUID1.Data4[6] = GUID2.Data4[6]) and
-       (GUID1.Data4[7] = GUID2.Data4[7]) then
-      UpdateTMD(Context, GUID1.Data4[2], 6);
-  end;
-
-  if midDrives in MachineInfo then begin
-    {include drive specific information}
-    for Drive := 2 {C} to 25 {Z} do begin
-      if GetDriveType(Drive) = DRIVE_FIXED then begin
-        FillChar(Buf, Sizeof(Buf), 0);
-        Buf[0] := Drive;
-        {!!.06} {removed cluster information}
-        PLongInt(@Buf[1])^ := GetDiskSerialNumber(Chr(Drive+Ord('A')));{!!.06}
-        UpdateTMD(Context, Buf, 5);
       end;
     end;
   end;
@@ -1088,7 +1038,6 @@ begin
 
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
-{$ENDIF}
 {$ENDIF}
 
 {key generation routines }
