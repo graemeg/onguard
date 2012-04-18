@@ -971,7 +971,9 @@ var
   Drive   : Integer;
   Context : TTMDContext;
   Buf     : array [0..2047] of Byte;
+  sl: TStringList;
   iFileHandle : LongInt;
+  s: string;
 
   function lGetUnixUserName: string;
   begin
@@ -1008,22 +1010,41 @@ begin
     {include system specific information}
     iFileHandle := FileOpen('/proc/cpuinfo', fmopenRead or fmShareDenyNone);
     I := FileRead(iFileHandle, Buf,2048);
-    if I > 0 then  UpdateTMD(Context, Buf, I-1);
+    if I > 0 then
+    begin
+      sl := TStringList.Create;
+      try
+        SetLength(s, Length(Buf));
+        Move(Buf, s[1], Length(Buf));
+        sl.Text := s;
+        { two cpu properties change between reboot. Blank them out }
+        for i := 0 to sl.Count-1 do
+        begin
+          if Pos('cpu MHz', sl[i]) > 0 then
+            sl[i] := 'cpu MHz'
+          else if Pos('bogomips', sl[i]) > 0 then
+            sl[i] := 'bogomips';
+        end;
+        s := sl.Text;
+        { place new data into Buf buffer }
+        FillChar(Buf, Sizeof(Buf), 0);
+        Move(s[1], Buf, Length(s));
+        UpdateTMD(Context, Buf, I-1);
+      finally
+        sl.Free;
+      end;
+    end;
     FileClose(iFileHandle);
-
 
     iFileHandle := FileOpen('/proc/sys/kernel/version', fmopenRead or fmShareDenyNone);
     I := FileRead(iFileHandle, Buf, 2048);
     if I > 0 then  UpdateTMD(Context, Buf, I-1);
     FileClose(iFileHandle);
 
-
-
     iFileHandle := FileOpen('/proc/sys/kernel/osrelease', fmopenRead or fmShareDenyNone);
     I := FileRead(iFileHandle, Buf, 2048);
     if I > 0 then  UpdateTMD(Context, Buf, I-1);
     FileClose(iFileHandle);
-
 
     iFileHandle := FileOpen('/proc/sys/kernel/hostname', fmopenRead or fmShareDenyNone);
     I := FileRead(iFileHandle, Buf, 2048);
