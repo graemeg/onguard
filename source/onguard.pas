@@ -582,7 +582,7 @@ procedure GenerateTMDKeyPrim(var Key; KeySize : Cardinal; const Str : string);
 procedure GenerateMD5KeyPrim(var Key: TKey; const Str : string);
 
 {modifier routines}
-function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;   {!!.05}
+function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
 function GenerateStringModifierPrim(const S : string) : LongInt;
 function GenerateUniqueModifierPrim : LongInt;
 function GenerateMachineModifierPrim : LongInt;
@@ -610,6 +610,7 @@ uses
   ,ogconst
   {$IFDEF MakeCodesSupport} ,qonguard2 {$ENDIF}
   {$IFDEF MakeKeysSupport}  ,qonguard3  {$ENDIF}
+  ,dbugintf
   ;
 {$ENDIF}
 {$IFNDEF IBO_CONSOLE}
@@ -822,10 +823,6 @@ begin
 end;
 
 {$IFDEF Win32}
-{!!.05} {added}
-
-
-
 function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
 { Obtains information from:
     - Volume sizes (NOT free space)
@@ -835,18 +832,17 @@ function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
     - Network card ID (if available)
 }
 const
-  sCurVer   = 'Software\Microsoft\Windows\CurrentVersion';           {!!.11}
-  sCurVerNT = 'Software\Microsoft\Windows NT\CurrentVersion';        {!!.11}
-  sRegOwner = 'RegisteredOwner';                                     {!!.11}
-  sRegOrg   = 'RegisteredOrganization';                              {!!.11}
+  sCurVer   = 'Software\Microsoft\Windows\CurrentVersion';
+  sCurVerNT = 'Software\Microsoft\Windows NT\CurrentVersion';
+  sRegOwner = 'RegisteredOwner';
+  sRegOrg   = 'RegisteredOrganization';
 
-type                                                                     {!!.11}
-  TUuidCreateSequential = function (lpGUID : Pointer): HResult; stdcall; {!!.11}
+type
+  TUuidCreateSequential = function (lpGUID : Pointer): HResult; stdcall;
 
-  
 var
-  hRPCTR4 : THandle;                                                 {!!.11}
-  UuidCreateSequential : TUuidCreateSequential;                      {!!.11}
+  hRPCTR4 : THandle;
+  UuidCreateSequential : TUuidCreateSequential;
   I       : DWord;
   RegKey  : HKEY;
   GUID1   : TGUID;
@@ -854,7 +850,7 @@ var
   Drive   : AnsiChar;
   SysInfo : TSystemInfo;
   Context : TTMDContext;
-  UserInfoFound : Boolean;                                           {!!.11}
+  UserInfoFound : Boolean;
   Buf     : array [0..1023] of Byte;
   iController, iDrive, maxController : Integer;
   BufStr : AnsiString;
@@ -862,40 +858,44 @@ begin
   InitTMD(Context);
 
   {include user specific information}
-  if midUser in MachineInfo then begin
-{!!.11}
+  if midUser in MachineInfo then
+  begin
     UserInfoFound := False;
     { first look for registered info in \Windows\CurrentVersion }
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, sCurVer, 0,
-        KEY_QUERY_VALUE, RegKey) = ERROR_SUCCESS) then begin
+        KEY_QUERY_VALUE, RegKey) = ERROR_SUCCESS) then
+    begin
       I := SizeOf(Buf);
-      if RegQueryValueEx(RegKey, sRegOwner, nil, nil, @Buf, @I) = ERROR_SUCCESS then begin
+      if RegQueryValueEx(RegKey, sRegOwner, nil, nil, @Buf, @I) = ERROR_SUCCESS then
+      begin
         UserInfoFound := True;
         UpdateTMD(Context, Buf, I);
         I := SizeOf(Buf);
         if RegQueryValueEx(RegKey, sRegOrg, nil, nil, @Buf, @I) = ERROR_SUCCESS then
           UpdateTMD(Context, Buf, I);
       end;
-      RegCloseKey(RegKey);                                           {!!.13}
+      RegCloseKey(RegKey);
     end;
 
-{!!.11}
     { if not found, then look in \Windows NT\CurrentVersion }
     if not UserInfoFound then
       if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, sCurVerNT, 0,
-          KEY_QUERY_VALUE, RegKey) = ERROR_SUCCESS) then begin
+          KEY_QUERY_VALUE, RegKey) = ERROR_SUCCESS) then
+      begin
         I := SizeOf(Buf);
-        if RegQueryValueEx(RegKey, sRegOwner, nil, nil, @Buf, @I) = ERROR_SUCCESS then begin
+        if RegQueryValueEx(RegKey, sRegOwner, nil, nil, @Buf, @I) = ERROR_SUCCESS then
+        begin
           UpdateTMD(Context, Buf, I);
           I := SizeOf(Buf);
           if RegQueryValueEx(RegKey, sRegOrg, nil, nil, @Buf, @I) = ERROR_SUCCESS then
             UpdateTMD(Context, Buf, I);
         end;
-        RegCloseKey(RegKey);                                         {!!.13}
+        RegCloseKey(RegKey);
       end;
-  end;
+  end; { midUser }
 
-  if midSystem in MachineInfo then begin
+  if midSystem in MachineInfo then
+  begin
     {include system specific information}
     GetSystemInfo(SysInfo);
     PDWord(@Buf[0])^ := SysInfo.dwOemId;
@@ -903,27 +903,23 @@ begin
     UpdateTMD(Context, Buf, 8);
   end;
 
-  if midNetwork in MachineInfo then begin
+  if midNetwork in MachineInfo then
+  begin
     {include network ID}
+    CreateGuid(GUID1);
+    CreateGuid(GUID2);
 
-    CreateGuid(GUID1); //CoCreateGuid(GUID1);
-    CreateGuid(GUID2); //CoCreateGuid(GUID2);
-
-     
-{!!.11}
     { use UuidCreateSequential instead of CoCreateGuid if available }
-        hRPCTR4 := LoadLibrary('rpcrt4.dll');
-        if (hRPCTR4 <> 0) then begin
-          UuidCreateSequential := TUuidCreateSequential(GetProcAddress(hRPCTR4, 'UuidCreateSequential'));
-          if Assigned(UuidCreateSequential) then begin
-            UuidCreateSequential(@GUID1);
-            UuidCreateSequential(@GUID2);
-          end;
-          FreeLibrary(hRPCTR4);                                      {!!.13}
-        end;
-{!!.11}
-
-
+    hRPCTR4 := LoadLibrary('rpcrt4.dll');
+    if (hRPCTR4 <> 0) then begin
+      UuidCreateSequential := TUuidCreateSequential(GetProcAddress(hRPCTR4, 'UuidCreateSequential'));
+      if Assigned(UuidCreateSequential) then
+      begin
+        UuidCreateSequential(@GUID1);
+        UuidCreateSequential(@GUID2);
+      end;
+      FreeLibrary(hRPCTR4);
+    end;
 
     {check to see if "network" ID is available}
     if (GUID1.D4[2] = GUID2.D4[2]) and
@@ -932,27 +928,22 @@ begin
        (GUID1.D4[5] = GUID2.D4[5]) and
        (GUID1.D4[6] = GUID2.D4[6]) and
        (GUID1.D4[7] = GUID2.D4[7]) then
-      UpdateTMD(Context, GUID1.D4[2], 6);//brandys
-  end;
+      UpdateTMD(Context, GUID1.D4[2], 6);
+  end; { midNetwork }
 
-  if midDrives in MachineInfo then begin
-    {include drive specific information}
-  maxController := 15;
-  if Win32Platform<>VER_PLATFORM_WIN32_NT then maxController := 0;
-  for iController := 0 to maxController do
+  if midDrives in MachineInfo then
   begin
-    for iDrive := 0 to 4 do
+    {include drive specific information}
+    maxController := 15;
+    if Win32Platform <> VER_PLATFORM_WIN32_NT then
+      maxController := 0;
+    for iController := 0 to maxController do
     begin
+      for iDrive := 0 to 4 do
+      begin
         BufStr := '';
         if GetIdeDiskSerialNumber(iController,iDrive,BufStr) then
            if BufStr<>'' then UpdateTMD(Context, BufStr[1], 5);
-    end;
-  end;
-  end;
-
-  FinalizeTMD(Context, Result, SizeOf(Result));
-end;
-{$ELSE}
       end;
     end;
   end;
@@ -1157,7 +1148,6 @@ begin
   Result := T128Bit(ID)[3];
 end;
 
-{!!.05} {revised}
 function GenerateMachineModifierPrim : LongInt;
 begin
   Result := CreateMachineID([midUser, midSystem, {midNetwork,} midDrives]);
