@@ -57,7 +57,6 @@ Ports :   Andrew Haines (Kylix version), Bogusław Brandys (FPC/Lazarus), Graeme
         <Type Value="Include"/>
       </Item7>
     </Files>
-    <Type Value="DesignTime"/>
     <RequiredPkgs Count="1">
       <Item1>
         <PackageName Value="fcl"/>
@@ -70,6 +69,5 @@ Ports :   Andrew Haines (Kylix version), Bogusław Brandys (FPC/Lazarus), Graeme
       <Version Value="2"/>
       <IgnoreBinaries Value="False"/>
     </PublishOptions>
-    <Provides Count="1"/>
   </Package>
 </CONFIG>
