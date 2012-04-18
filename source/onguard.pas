@@ -960,6 +960,8 @@ end;
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
 {$ELSE}
+{$NOTE Make sure we have some FreeBSD and MacOSX support too at some point }
+{ We now assume Linux is used }
 function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
 var
   I       : LongInt;
@@ -970,13 +972,35 @@ var
   Context : TTMDContext;
   Buf     : array [0..2047] of Byte;
   iFileHandle : LongInt;
+
+  function lGetUnixUserName: string;
+  begin
+    // the first two are used when run from a normal login shell
+    Result := GetEnvironmentVariable('USERNAME');
+    if Result = '' then
+      Result := GetEnvironmentVariable('USER');
+    // Used if program is run from cron jobs
+    if Result = '' then
+      Result := GetEnvironmentVariable('LOGNAME');
+  end;
+
 begin
   InitTMD(Context);
 
   {include user specific information}
   if midUser in MachineInfo then
   begin
-   //[to do] find some organization specific info
+    // There is no organization specific info, so lets use the user login name
+    s := lGetUnixUserName;
+    I := Length(s);
+    if i > 2048 then
+    begin
+      s := Copy(s, 1, 2048);  // only first 2048 characters
+      i := 2048;
+    end;
+    FillChar(Buf, Sizeof(Buf), 0);
+    Move(s[1], Buf, I);
+    UpdateTMD(Context, Buf, I);
   end;
 
   if midSystem in MachineInfo then
