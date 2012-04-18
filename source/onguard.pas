@@ -155,7 +155,7 @@ type
     procedure(Sender : TObject; var Value : string)
     of object;
 
-  {base regisration code component}
+  {base registration code component}
   TOgCodeBase = class(TComponent)
   protected {private}
     {property variables}
