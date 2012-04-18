@@ -1,6 +1,7 @@
 program codegen;
 
 {$mode objfpc}{$H+}
+{$ifdef mswindows}{$apptype gui}{$endif}
 
 uses
   {$IFDEF UNIX}
