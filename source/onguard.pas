@@ -1046,6 +1046,8 @@ begin
       UpdateTMD(Context, GUID1.D4[2], 6);
   end;
 
+  // TODO: This midDrives code is rubbish and doesn't work with SATA or SCSI drives.
+(*
   if midDrives in MachineInfo then
   begin
     {include drive specific information}
@@ -1053,12 +1055,12 @@ begin
       if GetDriveType(Drive) = 3 {DRIVE_FIXED} then begin
         FillChar(Buf, Sizeof(Buf), 0);
         Buf[0] := Drive;
-        {!!.06} {removed cluster information}
-        PLongInt(@Buf[1])^ := GetDiskSerialNumber(Chr(Drive+Ord('A')));{!!.06}
+        PLongInt(@Buf[1])^ := GetDiskSerialNumber(Chr(Drive+Ord('A')));
         UpdateTMD(Context, Buf, 5);
       end;
     end;
   end;
+*)
 
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
