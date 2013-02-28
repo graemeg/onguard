@@ -431,12 +431,11 @@ begin
   Result := (GetDriveType(PAnsiChar(ExtractFileDrive(ExePath) + '\')) = DRIVE_REMOTE);
 end;
 {$ENDIF}
-{$IFDEF LINUX}
+{$IFDEF Unix}
 function IsAppOnNetwork(const ExePath : string) : Boolean;
 begin
   Result := False;
 end;
-{$ENDIF}
 {$ENDIF}
 
 function LockNetAccessFile(const FileName : string; const Key : TKey;
