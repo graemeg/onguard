@@ -807,10 +807,9 @@ begin
   Result := CreateGuid(Guid);
 end;
 
-
 function timeGetTime: Cardinal;
 begin
- Result := Cardinal(Trunc(Now * 24 * 60 * 60 * 1000));;
+ Result := Cardinal(Trunc(Now * 24 * 60 * 60 * 1000));
 end;
 {$ENDIF Linux}
 
