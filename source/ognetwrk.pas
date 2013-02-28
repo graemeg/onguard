@@ -161,6 +161,8 @@ function UnlockNetAccessFile(var NetAccess : TNetAccess) : Boolean;
 
 implementation
 
+uses
+  ogfile;
 
 {*** TOgNetCode ***}
 
