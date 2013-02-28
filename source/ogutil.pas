@@ -49,14 +49,14 @@ interface
 
 uses
   SysUtils
-{$IFDEF LINUX}                                                      {AH.01}
+{$IFDEF Unix}
   ,BaseUnix
 {$ENDIF}
 {$IFDEF WIN32}
 
-{$ENDIF}                                                            {AH.01}
-//  {$IFNDEF IBO_CONSOLE},Dialogs{$ENDIF}        {AH.02}
-  ;                                                          {!!.08}
+{$ENDIF}
+//  {$IFNDEF IBO_CONSOLE},Dialogs{$ENDIF}
+  ;
 
 const
   DefAutoCheck      = True;
@@ -257,6 +257,12 @@ function HiWord(I: DWORD):Word;
 function CoCreateGuid(out guid: TGUID): HResult;
 function timeGetTime: Cardinal;
 {$ENDIF}
+{$IFDEF FREEBSD}
+function GetDriveType(drive:Integer): Integer;
+function HiWord(I: DWORD):Word;
+function CoCreateGuid(out guid: TGUID): HResult;
+function timeGetTime: Cardinal;
+{$ENDIF}
 
 
 
@@ -285,8 +291,8 @@ begin
     Result := Result + ',' + HexStr + IntToHex(Bytes[I], 2);
 end;
 
-{$IFNDEF LINUX}
-{$IFNDEF Win32}
+{%region 'I think this is Win16 leftover code' -fold}
+(*
 type
   PMediaIDRec = ^TMediaIDRec;
   TMediaIDRec = packed record
@@ -389,8 +395,8 @@ begin
   else
     Result := -1;
 end;
-{$ENDIF}
-{$ENDIF}
+*)
+{%endregion}
 
 {$IFDEF LINUX}
 function MyHashElf(const Buf;  BufSize : LongInt) : LongInt;
@@ -459,6 +465,19 @@ begin
     Result := MyHashElf(drive_model[1], Length(drive_model));
 end;
 {$ENDIF}
+
+{$IFDEF FreeBSD}
+function GetDiskSerialNumber(Drive : AnsiChar) : LongInt;
+begin
+  {$NOTE: Still to be implemented }
+  Result := 0;
+end;
+
+function MyHashElf(const Buf;  BufSize : LongInt) : LongInt;
+begin
+  Result := 0;
+end;
+{$ENDIF FreeBSD}
 
 function HexStringIsZero(const Hex : string) : Boolean;
 var
@@ -777,8 +796,6 @@ begin
  end;
 end;
 
-
-
 function HiWord(I: DWORD):Word;
 begin
  Result := I shl 16;
@@ -795,8 +812,30 @@ function timeGetTime: Cardinal;
 begin
  Result := Cardinal(Trunc(Now * 24 * 60 * 60 * 1000));;
 end;
-{$ENDIF}
+{$ENDIF Linux}
 
+{$IFDEF FreeBSD}
+function GetDriveType(drive: Integer): Integer;
+begin
+
+end;
+
+function HiWord(I: DWORD): Word;
+begin
+  Result := I shl 16;
+  Result := I and $FFFF;
+end;
+
+function CoCreateGuid(out guid: TGUID): HResult;
+begin
+  Result := CreateGuid(Guid);
+end;
+
+function timeGetTime: Cardinal;
+begin
+  Result := Cardinal(Trunc(Now * 24 * 60 * 60 * 1000));
+end;
+{$ENDIF FreeBSD}
 
 {$IFDEF IBO_CONSOLE}
 {first 2048 bits of Pi in hexadecimal, low to high, without the leading "3"}
@@ -1139,8 +1178,10 @@ end;
 
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
-{$ELSE}
-{$IFNDEF LINUX}
+{$ENDIF Win32}
+
+{%region 'I think this is leftover Win16 code' -fold}
+(*
 function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
 var
   I       : DWord;
@@ -1196,7 +1237,10 @@ begin
 
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
-{$ELSE}
+*)
+{%endregion}
+
+{$IFDEF Linux}
 function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
 var
   I       : DWord;
@@ -1291,8 +1335,14 @@ begin
 
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
-{$ENDIF}
-{$ENDIF}
+{$ENDIF Linux}
+
+{$IFDEF FreeBSD}
+function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
+begin
+  Result := 0;
+end;
+{$ENDIF FreeBSD}
 
 {key generation routines }
 procedure GenerateRandomKeyPrim(var Key; KeySize: Cardinal);
