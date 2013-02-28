@@ -428,15 +428,6 @@ function IsAppOnNetwork(const ExePath : string) : Boolean;
 begin
   Result := (GetDriveType(PAnsiChar(ExtractFileDrive(ExePath) + '\')) = DRIVE_REMOTE);
 end;
-{$ELSE}
-{$IFNDEF LINUX}
-function IsAppOnNetwork(const ExePath : string) : Boolean;
-var
-  D : Integer;
-begin
-  D := Ord(UpCase(ExePath[1])) - Ord('A');                             {!!.07}
-  Result := GetDriveType(D) = DRIVE_REMOTE;
-end;
 {$ENDIF}
 {$IFDEF LINUX}
 function IsAppOnNetwork(const ExePath : string) : Boolean;
