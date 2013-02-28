@@ -42,7 +42,7 @@ interface
 
 uses
   {$IFDEF MSWINDOWS} Windows, {$ENDIF}                             {AH.01}
-  {$IFDEF LINUX} BaseUnix, {$ENDIF}                                    {AH.01}
+  {$IFDEF Unix} BaseUnix, {$ENDIF}                                    {AH.01}
   SysUtils,
   ogutil;                                                          {AH.01}
 
@@ -50,10 +50,8 @@ uses
 function GetFileSize(Handle : THandle) : Cardinal;
 
 {$IFNDEF Win32}
-function LockFile(hFile: THandle; dwFileOffsetLow, dwFileOffsetHigh: DWORD;
- nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh: DWORD): Boolean;
-function UnlockFile(hFile: THandle; dwFileOffsetLow, dwFileOffsetHigh: DWORD;
- nNumberOfBytesToUnlockLow, nNumberOfBytesToUnlockHigh: DWORD): Boolean;
+function LockFile(hFile: THandle; dwFileOffsetLow, dwFileOffsetHigh: DWORD; nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh: DWORD): Boolean;
+function UnlockFile(hFile: THandle; dwFileOffsetLow, dwFileOffsetHigh: DWORD; nNumberOfBytesToUnlockLow, nNumberOfBytesToUnlockHigh: DWORD): Boolean;
 {
 function LockFile(Handle : THandle; FileOffsetLow, FileOffsetHigh,
                   LockCountLow, LockCountHigh : Word) : Boolean;
@@ -154,8 +152,6 @@ begin
   FLockInfo.l_pid := {$ifdef FPC}fpgetpid{$else}getpid{$endif}();
   Result := {$ifdef FPC}fpfcntl{$else}fcntl{$endif}(hFile, F_SETLK, FLockInfo) <> -1;
 end;
-
-
 
 
 {
