@@ -65,6 +65,7 @@ type
     procedure   InfoChanged(Sender: TObject);
     procedure   btnKeyMaintClicked(Sender: TObject);
     procedure   btnGenerateClicked(Sender: TObject);
+    procedure   btnOKClicked(Sender: TObject);
     procedure   pgCodeChanged(Sender: TObject; NewActiveSheet: TfpgTabSheet);
     procedure   ModifierChanged(Sender: TObject);
     procedure   btnSerialRandomClicked(Sender: TObject);
@@ -263,6 +264,11 @@ begin
     TfpgMessageDialog.Critical('', SCInvalidKeyOrModifier);
 end;
 
+procedure TCodeGenerationForm.btnOKClicked(Sender: TObject);
+begin
+  Close;
+end;
+
 procedure TCodeGenerationForm.pgCodeChanged(Sender: TObject; NewActiveSheet: TfpgTabSheet);
 begin
   edtRegCode.Text := '';
@@ -447,6 +453,7 @@ begin
     Hint := '';
     ImageName := '';
     TabOrder := 1;
+    OnClick := @btnOKClicked;
   end;
 
   btnCancel := TfpgButton.Create(self);
@@ -460,6 +467,7 @@ begin
     Hint := '';
     ImageName := '';
     TabOrder := 2;
+    OnClick := @btnOKClicked;
   end;
 
   pgCodes := TfpgPageControl.Create(self);
