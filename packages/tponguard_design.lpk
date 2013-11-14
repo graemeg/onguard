@@ -10,6 +10,7 @@
         <IncludeFiles Value="../source"/>
         <OtherUnitFiles Value="../source;../source/lcl"/>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+        <SrcPath Value="../source"/>
       </SearchPaths>
       <Parsing>
         <SyntaxOptions>
@@ -23,7 +24,7 @@
       </Other>
     </CompilerOptions>
     <Description Value="TurboPower OnGuard - Designtime Only packages.
-This registers various OnGuard components and property editors with Lazarus IDE."/>
+This registers various OnGuard components and property editors with Lazarus IDE. This LCL is a requirement."/>
     <License Value="Mozilla Public License 1.1
 
 "/>
