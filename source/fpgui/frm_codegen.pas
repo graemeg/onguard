@@ -66,6 +66,7 @@ type
     procedure   btnKeyMaintClicked(Sender: TObject);
     procedure   btnGenerateClicked(Sender: TObject);
     procedure   btnOKClicked(Sender: TObject);
+    procedure   btnCopyToClipboardClicked(Sender: TObject);
     procedure   pgCodeChanged(Sender: TObject; NewActiveSheet: TfpgTabSheet);
     procedure   ModifierChanged(Sender: TObject);
     procedure   btnSerialRandomClicked(Sender: TObject);
@@ -264,9 +265,15 @@ begin
     TfpgMessageDialog.Critical('', SCInvalidKeyOrModifier);
 end;
 
+
 procedure TCodeGenerationForm.btnOKClicked(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TCodeGenerationForm.btnCopyToClipboardClicked(Sender: TObject);
+begin
+  fpgClipboard.Text := edtRegCode.Text;
 end;
 
 procedure TCodeGenerationForm.pgCodeChanged(Sender: TObject; NewActiveSheet: TfpgTabSheet);
@@ -842,6 +849,7 @@ begin
     Hint := 'Copy to clipboard';
     ImageName := '';
     TabOrder := 3;
+    OnClick := @btnCopyToClipboardClicked;
   end;
 
   Label3 := TfpgLabel.Create(tsSerialNo);
