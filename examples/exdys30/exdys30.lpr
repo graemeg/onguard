@@ -4,7 +4,7 @@ program Exdys30;
 uses
   Interfaces,
   Forms,
-  Exdys30u in 'EXDYS30U.PAS' {Form1}, tponguard;
+  Exdys30u;
 
 
 begin

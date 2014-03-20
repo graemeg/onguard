@@ -11,12 +11,12 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   OnCreate = FormCreate
   Position = poScreenCenter
-  LCLVersion = '0.9.27'
+  LCLVersion = '1.1'
   object Label1: TLabel
     Left = 64
-    Height = 14
+    Height = 13
     Top = 74
-    Width = 84
+    Width = 97
     Alignment = taCenter
     Caption = 'Days Remaining: '
     ParentColor = False
@@ -39,7 +39,6 @@ object Form1: TForm1
     Top = 92
     Width = 89
     Kind = bkClose
-    NumGlyphs = 0
     TabOrder = 1
   end
   object OgDaysCode1: TOgDaysCode

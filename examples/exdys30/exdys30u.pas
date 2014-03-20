@@ -107,8 +107,9 @@ procedure TForm1.OgDaysCode1ChangeCode(Sender: TObject; Code: TCode);
 var
   S       : string;
 begin
-if codeinvalid then Exit;
-  IniFile := TIniFile.Create(TheDir + 'Days30.INI');
+  if codeinvalid then
+    Exit;
+  IniFile := TIniFile.Create(TheDir + 'Days30.ini');
   try
     {convert Code to string for writing to INI file}
     S := BufferToHex(Code, SizeOf(Code));
