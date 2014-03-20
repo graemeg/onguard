@@ -1974,7 +1974,10 @@ begin
   MixBlock(T128bit(Key), Work, False);
   Result := (Work.CheckValue = DaysCheckCode) and
             (ExpandDate(Work.LastAccess) <= Date);
-  if (not Result) and (Work.InvalidCount >0) then Result := true;
+  { 2014-03-20 graemeg:
+    Disabled the InvalidCount check because it is way to easy to circumvent
+    the security by simply editing the .ini file. }
+//  if (not Result) and (Work.InvalidCount >0) then Result := true;
 end;
 
 procedure DecDaysCode(const Key : TKey; var Code : TCode);
