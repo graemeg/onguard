@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 324
+  Left = 401
   Height = 158
-  Top = 260
+  Top = 202
   Width = 229
   Caption = 'Form1'
   ClientHeight = 158
@@ -11,12 +11,12 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   OnCreate = FormCreate
   Position = poScreenCenter
-  LCLVersion = '1.1'
+  LCLVersion = '1.5'
   object Label1: TLabel
     Left = 64
     Height = 13
     Top = 74
-    Width = 97
+    Width = 99
     Alignment = taCenter
     Caption = 'Days Remaining: '
     ParentColor = False

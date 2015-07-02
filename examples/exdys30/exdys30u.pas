@@ -15,7 +15,7 @@ interface
 
 uses
   SysUtils, Classes, Controls,
-  Forms, Dialogs,LResources, StdCtrls, Buttons,
+  Forms, Dialogs, StdCtrls, Buttons,
   OnGuard,OgUtil,IniFiles;
 
 const
@@ -49,7 +49,7 @@ var
 
 implementation
 
-
+{$R *.lfm}
 
 {==========================================================================}
 
@@ -148,7 +148,5 @@ begin
   Application.Terminate;
 end;
 
-initialization
-{$i exdys30u.lrs}
 
 end.
