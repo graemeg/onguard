@@ -3,7 +3,7 @@
   program is run, the necessary information is created and stored
   in an INI file. In addition, the program is given a "drop dead"
   date, i.e., regardless of how many days the program has been used,
-  it cannont be used after that date (2014-12-31).
+  it cannont be used after that date (2114-12-31).
 
   NOTE:   *** This feature has now been disable in OnGuard ***
   InvalidCount is set to 3, user is allowed to 3 times break the rules,
@@ -86,8 +86,8 @@ begin
 
     {If default string returned, create code on the fly}
     if (S = 'NoCode') then begin
-      { force absolute ("drop dead") expiration date of 2014-12-31 }
-      Expires := EncodeDate(2014, 12, 31);
+      { force absolute ("drop dead") expiration date of 2114-12-31 }
+      Expires := EncodeDate(2114, 12, 31);
       InitDaysCode(CKey, 30, Expires, Code,3);
 
       {save string representation of release code to Ini File}
