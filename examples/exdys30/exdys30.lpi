@@ -6,8 +6,8 @@
       <Flags>
         <LRSInOutputDirectory Value="False"/>
       </Flags>
+      <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
-      <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -34,17 +34,11 @@
         <MinVersion Major="1" Valid="True"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="7">
+    <Units Count="2">
       <Unit0>
         <Filename Value="exdys30.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="0"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1"/>
-        <CursorPos X="11" Y="7"/>
-        <UsageCount Value="212"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UnitName Value="Exdys30"/>
       </Unit0>
       <Unit1>
         <Filename Value="exdys30u.pas"/>
@@ -53,113 +47,17 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Exdys30u"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1"/>
-        <CursorPos X="14" Y="8"/>
-        <UsageCount Value="212"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit1>
-      <Unit2>
-        <Filename Value="../../source/onguard.pas"/>
-        <UnitName Value="onguard"/>
-        <EditorIndex Value="2"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1990"/>
-        <CursorPos X="9" Y="1999"/>
-        <UsageCount Value="106"/>
-        <Loaded Value="True"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="/temp/fpc/rtl/i386/i386.inc"/>
-        <TopLine Value="1447"/>
-        <CursorPos X="1" Y="1462"/>
-        <UsageCount Value="10"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="../../source/qogabout0.pas"/>
-        <ComponentName Value="OgAboutForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="qogabout0"/>
-        <TopLine Value="179"/>
-        <CursorPos X="42" Y="184"/>
-        <UsageCount Value="10"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="/lazarus/lcl/extctrls.pp"/>
-        <UnitName Value="ExtCtrls"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="../../source/ogutil.pas"/>
-        <UnitName Value="ogutil"/>
-        <TopLine Value="56"/>
-        <CursorPos X="3" Y="71"/>
-        <UsageCount Value="10"/>
-      </Unit6>
     </Units>
-    <JumpHistory Count="13" HistoryIndex="12">
-      <Position1>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="130" Column="1" TopLine="115"/>
-      </Position1>
-      <Position2>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="132" Column="1" TopLine="117"/>
-      </Position2>
-      <Position3>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="133" Column="1" TopLine="118"/>
-      </Position3>
-      <Position4>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="134" Column="1" TopLine="119"/>
-      </Position4>
-      <Position5>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="151" Column="1" TopLine="127"/>
-      </Position5>
-      <Position6>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="113" Column="1" TopLine="98"/>
-      </Position6>
-      <Position7>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="94" Column="27" TopLine="84"/>
-      </Position7>
-      <Position8>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="36" Column="30" TopLine="30"/>
-      </Position8>
-      <Position9>
-        <Filename Value="exdys30u.pas"/>
-        <Caret Line="1" Column="37" TopLine="7"/>
-      </Position9>
-      <Position10>
-        <Filename Value="../../source/onguard.pas"/>
-        <Caret Line="401" Column="55" TopLine="376"/>
-      </Position10>
-      <Position11>
-        <Filename Value="../../source/onguard.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position11>
-      <Position12>
-        <Filename Value="../../source/onguard.pas"/>
-        <Caret Line="1977" Column="3" TopLine="1969"/>
-      </Position12>
-      <Position13>
-        <Filename Value="../../source/onguard.pas"/>
-        <Caret Line="83" Column="5" TopLine="63"/>
-      </Position13>
-    </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
+    <Target>
+      <Filename Value="exdys30"/>
+    </Target>
+    <SearchPaths>
+      <UnitOutputDirectory Value="units/${TargetCPU}-${TargetOS}"/>
+    </SearchPaths>
     <Parsing>
       <SyntaxOptions>
         <IncludeAssertionCode Value="True"/>
@@ -181,34 +79,8 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="3">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../source/onguard.pas"/>
-        <Line Value="1360"/>
-      </Item1>
-      <Item2>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../source/qogabout0.pas"/>
-        <Line Value="102"/>
-      </Item2>
-      <Item3>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../source/qogabout0.pas"/>
-        <Line Value="97"/>
-      </Item3>
-    </BreakPoints>
     <Exceptions Count="2">
       <Item1>
         <Name Value="ECodetoolError"/>
@@ -218,5 +90,4 @@
       </Item2>
     </Exceptions>
   </Debugging>
-  <EditorMacros Count="0"/>
 </CONFIG>
