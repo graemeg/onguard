@@ -53,7 +53,6 @@ uses
   qonguard5,                                                       {AH.01}
   qonguard6,                                                       {AH.01}
   qonguard7,                                                       {AH.01}
-  ogutil,                                                            {!!.12}
   ComponentEditors,
   PropEdits,
   LazarusPackageIntf,
