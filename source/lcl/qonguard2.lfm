@@ -1,7 +1,7 @@
 object CodeGenerateFrm: TCodeGenerateFrm
-  Left = 228
+  Left = 362
   Height = 516
-  Top = 84
+  Top = 138
   Width = 556
   ActiveControl = OKBtn
   BorderIcons = [biSystemMenu, biMinimize]
@@ -12,7 +12,7 @@ object CodeGenerateFrm: TCodeGenerateFrm
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '0.9.27'
+  LCLVersion = '1.5'
   object OKBtn: TBitBtn
     Left = 384
     Height = 25
@@ -20,7 +20,6 @@ object CodeGenerateFrm: TCodeGenerateFrm
     Width = 75
     Caption = 'OK'
     ModalResult = 1
-    NumGlyphs = 0
     TabOrder = 0
   end
   object CancelBtn: TBitBtn
@@ -30,7 +29,6 @@ object CodeGenerateFrm: TCodeGenerateFrm
     Width = 75
     Caption = 'Cancel'
     ModalResult = 2
-    NumGlyphs = 0
     TabOrder = 1
   end
   object CodesNbk: TPageControl
@@ -44,21 +42,21 @@ object CodeGenerateFrm: TCodeGenerateFrm
     OnChanging = CodesNbkChanging
     object TabSheet1: TTabSheet
       Caption = 'Date'
-      ClientHeight = 104
-      ClientWidth = 525
+      ClientHeight = 101
+      ClientWidth = 529
       object Label9: TLabel
         Left = 4
-        Height = 14
+        Height = 15
         Top = 12
-        Width = 54
+        Width = 69
         Caption = 'Start date:'
         ParentColor = False
       end
       object Label11: TLabel
         Left = 204
-        Height = 14
+        Height = 15
         Top = 12
-        Width = 48
+        Width = 61
         Caption = 'End date:'
         ParentColor = False
       end
@@ -83,8 +81,8 @@ object CodeGenerateFrm: TCodeGenerateFrm
     end
     object TabSheet2: TTabSheet
       Caption = 'Days'
-      ClientHeight = 104
-      ClientWidth = 525
+      ClientHeight = 101
+      ClientWidth = 529
       ImageIndex = 1
       object Label13: TLabel
         Left = 4
@@ -124,8 +122,8 @@ object CodeGenerateFrm: TCodeGenerateFrm
     end
     object TabSheet3: TTabSheet
       Caption = 'Reg'
-      ClientHeight = 104
-      ClientWidth = 525
+      ClientHeight = 101
+      ClientWidth = 529
       ImageIndex = 2
       object RegStrCopySb: TSpeedButton
         Left = 490
@@ -133,7 +131,6 @@ object CodeGenerateFrm: TCodeGenerateFrm
         Hint = 'Copy to clipboard'
         Top = 7
         Width = 23
-        Color = clBtnFace
         Glyph.Data = {
           42010000424D4201000000000000760000002800000011000000110000000100
           040000000000CC00000000000000000000000000000000000000000000000000
@@ -147,7 +144,6 @@ object CodeGenerateFrm: TCodeGenerateFrm
           0000800000088888888880000000888888888888888880000000888888888888
           888880000000
         }
-        NumGlyphs = 0
         OnClick = RegStrCopySbClick
       end
       object Label6: TLabel
@@ -195,8 +191,8 @@ object CodeGenerateFrm: TCodeGenerateFrm
     end
     object TabSheet4: TTabSheet
       Caption = 'S/N'
-      ClientHeight = 104
-      ClientWidth = 525
+      ClientHeight = 101
+      ClientWidth = 529
       ImageIndex = 3
       object Label7: TLabel
         Left = 8
@@ -246,8 +242,8 @@ object CodeGenerateFrm: TCodeGenerateFrm
     end
     object TabSheet5: TTabSheet
       Caption = 'Usage'
-      ClientHeight = 104
-      ClientWidth = 525
+      ClientHeight = 101
+      ClientWidth = 529
       ImageIndex = 4
       object Label14: TLabel
         Left = 4
@@ -287,8 +283,8 @@ object CodeGenerateFrm: TCodeGenerateFrm
     end
     object TabSheet6: TTabSheet
       Caption = 'Network'
-      ClientHeight = 104
-      ClientWidth = 525
+      ClientHeight = 101
+      ClientWidth = 529
       ImageIndex = 5
       object Label10: TLabel
         Left = 4
@@ -311,8 +307,8 @@ object CodeGenerateFrm: TCodeGenerateFrm
     end
     object TabSheet7: TTabSheet
       Caption = 'Special'
-      ClientHeight = 104
-      ClientWidth = 525
+      ClientHeight = 101
+      ClientWidth = 529
       ImageIndex = 6
       object Label12: TLabel
         Left = 4
@@ -357,7 +353,7 @@ object CodeGenerateFrm: TCodeGenerateFrm
     Top = 136
     Width = 540
     Caption = '&Key used to encode'
-    ClientHeight = 230
+    ClientHeight = 231
     ClientWidth = 536
     Color = clBtnFace
     ParentColor = False
@@ -368,7 +364,6 @@ object CodeGenerateFrm: TCodeGenerateFrm
       Hint = 'Generate key'
       Top = 195
       Width = 23
-      Color = clBtnFace
       Glyph.Data = {
         42010000424D4201000000000000760000002800000011000000110000000100
         040000000000CC00000000000000000000000000000000000000000000000000
@@ -382,30 +377,29 @@ object CodeGenerateFrm: TCodeGenerateFrm
         0000888888888888888880000000888888888888888880000000888888888888
         888880000000
       }
-      NumGlyphs = 0
       OnClick = GenerateKeySbClick
     end
     object Label1: TLabel
       Left = 8
-      Height = 14
+      Height = 15
       Top = 115
-      Width = 43
+      Width = 54
       Caption = 'Modifier:'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 12
-      Height = 14
+      Height = 15
       Top = 172
-      Width = 23
+      Width = 25
       Caption = 'Key:'
       ParentColor = False
     end
     object NoModifierCb: TCheckBox
       Left = 16
-      Height = 17
+      Height = 21
       Top = 24
-      Width = 72
+      Width = 97
       Caption = 'No modifier'
       Checked = True
       OnClick = ModifierClick
@@ -414,36 +408,36 @@ object CodeGenerateFrm: TCodeGenerateFrm
     end
     object MachineModifierCb: TCheckBox
       Left = 176
-      Height = 17
+      Height = 21
       Top = 24
-      Width = 98
+      Width = 132
       Caption = 'Machine modifier'
       OnClick = ModifierClick
       TabOrder = 1
     end
     object UniqueModifierCb: TCheckBox
       Left = 360
-      Height = 17
+      Height = 21
       Top = 24
-      Width = 92
+      Width = 124
       Caption = 'Unique modifier'
       OnClick = ModifierClick
       TabOrder = 2
     end
     object DateModifierCb: TCheckBox
       Left = 16
-      Height = 17
+      Height = 21
       Top = 56
-      Width = 82
+      Width = 110
       Caption = 'Date modifier'
       OnClick = ModifierClick
       TabOrder = 3
     end
     object StringModifierCb: TCheckBox
       Left = 16
-      Height = 17
+      Height = 21
       Top = 88
-      Width = 87
+      Width = 115
       Caption = 'String Modifier'
       OnClick = ModifierClick
       TabOrder = 4
@@ -489,7 +483,7 @@ object CodeGenerateFrm: TCodeGenerateFrm
     Top = 384
     Width = 536
     Caption = 'Generate Code'
-    ClientHeight = 51
+    ClientHeight = 52
     ClientWidth = 532
     TabOrder = 4
     object RegCodeCopySb: TSpeedButton
@@ -498,7 +492,6 @@ object CodeGenerateFrm: TCodeGenerateFrm
       Hint = 'Copy code to clipboard'
       Top = 25
       Width = 23
-      Color = clBtnFace
       Glyph.Data = {
         42010000424D4201000000000000760000002800000011000000110000000100
         040000000000CC00000000000000000000000000000000000000000000000000
@@ -512,7 +505,6 @@ object CodeGenerateFrm: TCodeGenerateFrm
         0000800000088888888880000000888888888888888880000000888888888888
         888880000000
       }
-      NumGlyphs = 0
       OnClick = RegCodeCopySbClick
     end
     object GenerateBtn: TButton

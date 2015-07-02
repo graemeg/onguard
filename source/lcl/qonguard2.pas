@@ -32,7 +32,7 @@
 {*                 All rights reserved.                  *}
 {*********************************************************}
 
-{$I ONGUARD.INC}
+{$I onguard.inc}
 
 
 unit qonguard2;
@@ -48,8 +48,6 @@ uses
 //{$IFDEF UsingCLX}                                                  {AH.01}
 //  Types,                                                           {AH.01}
 //{$ENDIF}                                                           {AH.01}
- LCLIntf,
- LResources,
 //{$IFDEF LINUX}                                                     {AH.01}
 //  Libc,                                                            {AH.01}
 //{$ENDIF}                                                           {AH.01}
@@ -193,7 +191,7 @@ var
 
 implementation
 
-
+{$R *.lfm}
 
 procedure TCodeGenerateFrm.FormCreate(Sender: TObject);
 var
@@ -675,9 +673,6 @@ begin
     CodesNbk.ActivePageIndex := Ord(FCodeType);
   end;
 end;
-
-initialization
-{$I qonguard2.lrs}
 
 
 end.
