@@ -687,7 +687,7 @@ function OgFormatDate(Value : TDateTime) : string;
 var
   S : string;
 begin
-  ShortDateFormat := 'yyyy-mm-dd';
+  FormatSettings.ShortDateFormat := 'yyyy-mm-dd';
   {
   S := ShortDateFormat;
   if Pos('yyyy', S) = 0 then
