@@ -138,10 +138,10 @@ begin
      codeinvalid := true;
     end;
 
-    ogDayCountUsed : S := 'Program used more than 30 days' + #13 +
+    ogDayCountUsed : S := 'Program used more than 30 days' + LineEnding +
                           'Please register NOW';
 
-    ogCodeExpired  : S := 'Evaluation period expired' + #13 +
+    ogCodeExpired  : S := 'Evaluation period expired' + LineEnding +
                           'Please register NOW';
   end;
   ShowMessage(S);
