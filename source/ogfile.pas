@@ -43,8 +43,7 @@ interface
 uses
   {$IFDEF MSWINDOWS} Windows, {$ENDIF}                             {AH.01}
   {$IFDEF Unix} BaseUnix, {$ENDIF}                                    {AH.01}
-  SysUtils,
-  ogutil;                                                          {AH.01}
+  SysUtils;
 
 
 function GetFileSize(Handle : THandle) : Cardinal;
