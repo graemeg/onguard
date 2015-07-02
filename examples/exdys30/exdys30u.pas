@@ -79,7 +79,7 @@ begin
     TheDir := TheDir + '\';}
 
   {open Ini File}
-  IniFile := TIniFile.Create(TheDir + 'Days30.INI');
+  IniFile := TIniFile.Create(TheDir + 'days30.ini');
   try
     {try to read release code}
     S := IniFile.ReadString('Codes', 'DaysCode', 'NoCode');
@@ -109,7 +109,7 @@ var
 begin
   if codeinvalid then
     Exit;
-  IniFile := TIniFile.Create(TheDir + 'Days30.ini');
+  IniFile := TIniFile.Create(TheDir + 'days30.ini');
   try
     {convert Code to string for writing to INI file}
     S := BufferToHex(Code, SizeOf(Code));

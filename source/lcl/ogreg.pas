@@ -103,7 +103,7 @@ begin
     with TKeyMaintFrm.Create(Application) do
       try
         ShowHint := True;
-        KeyFileName := 'ONGUARD.INI';
+        KeyFileName := 'onguard.ini';
         KeyType := ktRandom;
         ShowModal;
       finally
