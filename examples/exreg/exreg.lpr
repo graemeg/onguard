@@ -5,7 +5,7 @@ program ExReg;
 uses
   Interfaces,
   Forms,
-  ExReg1 in 'ExReg1.pas' {frmExRegCode}, tponguard;
+  exreg1;
 
 
 begin

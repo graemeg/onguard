@@ -4,11 +4,9 @@ interface
 
 uses
   SysUtils, Classes,Controls, Forms, Dialogs,
-  StdCtrls, ComCtrls, Buttons,LResources, EditBtn;
+  StdCtrls, Buttons;
 
 type
-
-  { TfrmExRegCode }
 
   TfrmExRegCode = class(TForm)
     edDate: TEdit;
@@ -41,7 +39,7 @@ var
 
 implementation
 
-
+{$R exreg1.lfm}
 
 uses
   OnGuard, OgUtil;
@@ -92,7 +90,5 @@ begin
   edDate.Text := DateToStr(Now);
 end;
 
-initialization
-{$i exreg1.lrs}
 
 end.

@@ -1,49 +1,49 @@
 object frmExRegCode: TfrmExRegCode
-  Left = 391
-  Height = 298
-  Top = 180
+  Left = 494
+  Height = 295
+  Top = 288
   Width = 391
   BorderStyle = bsDialog
   Caption = 'Registration Code Example'
-  ClientHeight = 298
+  ClientHeight = 295
   ClientWidth = 391
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   OnCreate = FormCreate
   Position = poScreenCenter
-  LCLVersion = '0.9.27'
+  LCLVersion = '1.5'
   object GroupBox1: TGroupBox
     Left = 8
     Height = 129
     Top = 8
     Width = 369
     Caption = ' Registration Code Generator (vendor site) '
-    ClientHeight = 111
+    ClientHeight = 114
     ClientWidth = 365
     TabOrder = 0
     object Label1: TLabel
       Left = 39
-      Height = 14
+      Height = 13
       Top = 28
-      Width = 57
+      Width = 68
       Alignment = taRightJustify
       Caption = 'User Name:'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 14
-      Height = 14
+      Height = 13
       Top = 60
-      Width = 76
+      Width = 90
       Alignment = taRightJustify
       Caption = 'Expiration Date:'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 6
-      Height = 14
+      Height = 13
       Top = 92
-      Width = 88
+      Width = 105
       Alignment = taRightJustify
       Caption = 'Registration Code:'
       ParentColor = False
@@ -54,7 +54,6 @@ object frmExRegCode: TfrmExRegCode
       Hint = 'Generate Registration Code'
       Top = 88
       Width = 23
-      Color = clBtnFace
       Glyph.Data = {
         42010000424D4201000000000000760000002800000011000000110000000100
         040000000000CC00000000000000000000001000000000000000000000000000
@@ -68,21 +67,20 @@ object frmExRegCode: TfrmExRegCode
         0000888800888080088880000000888888000008888880000000888888888888
         888880000000
       }
-      NumGlyphs = 0
       OnClick = btnGenerateClick
       ShowHint = True
       ParentShowHint = False
     end
     object edtUserName1: TEdit
       Left = 120
-      Height = 23
+      Height = 21
       Top = 24
       Width = 233
       TabOrder = 0
     end
     object edtRegCode1: TEdit
       Left = 120
-      Height = 23
+      Height = 21
       Top = 88
       Width = 201
       Color = clBtnFace
@@ -91,7 +89,7 @@ object frmExRegCode: TfrmExRegCode
     end
     object edDate: TEdit
       Left = 121
-      Height = 23
+      Height = 21
       Top = 57
       Width = 118
       TabOrder = 2
@@ -103,32 +101,32 @@ object frmExRegCode: TfrmExRegCode
     Top = 152
     Width = 369
     Caption = ' Registration Code Verification (client site) '
-    ClientHeight = 111
+    ClientHeight = 114
     ClientWidth = 365
     TabOrder = 1
     object Label4: TLabel
       Left = 38
-      Height = 14
+      Height = 13
       Top = 60
-      Width = 57
+      Width = 68
       Alignment = taRightJustify
       Caption = 'User Name:'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 6
-      Height = 14
+      Height = 13
       Top = 28
-      Width = 88
+      Width = 105
       Alignment = taRightJustify
       Caption = 'Registration Code:'
       ParentColor = False
     end
     object Label6: TLabel
       Left = 70
-      Height = 14
+      Height = 13
       Top = 92
-      Width = 34
+      Width = 41
       Alignment = taRightJustify
       Caption = 'Status:'
       ParentColor = False
@@ -139,7 +137,6 @@ object frmExRegCode: TfrmExRegCode
       Hint = 'Verify Registration Code'
       Top = 88
       Width = 23
-      Color = clBtnFace
       Glyph.Data = {
         42010000424D4201000000000000760000002800000011000000110000000100
         040000000000CC00000000000000000000001000000000000000000000000000
@@ -153,28 +150,27 @@ object frmExRegCode: TfrmExRegCode
         0000888888888888888880000000888888888888888880000000888888888888
         888880000000
       }
-      NumGlyphs = 0
       OnClick = btnVerifyClick
       ShowHint = True
       ParentShowHint = False
     end
     object edtUserName2: TEdit
       Left = 120
-      Height = 23
+      Height = 21
       Top = 56
       Width = 233
       TabOrder = 0
     end
     object edtRegCode2: TEdit
       Left = 120
-      Height = 23
+      Height = 21
       Top = 24
       Width = 233
       TabOrder = 1
     end
     object edtStatus: TEdit
       Left = 120
-      Height = 23
+      Height = 21
       Top = 88
       Width = 97
       Color = clBtnFace
