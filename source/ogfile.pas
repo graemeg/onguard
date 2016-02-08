@@ -41,14 +41,14 @@ unit ogfile;                                                       {AH.01}
 interface
 
 uses
-  {$IFDEF MSWINDOWS} Windows, {$ENDIF}                             {AH.01}
+  {$IFDEF WINDOWS} Windows, {$ENDIF}                             {AH.01}
   {$IFDEF Unix} BaseUnix, {$ENDIF}                                    {AH.01}
   SysUtils;
 
 
 function GetFileSize(Handle : THandle) : Cardinal;
 
-{$IFNDEF Win32}
+{$IFNDEF WINDOWS}
 function LockFile(hFile: THandle; dwFileOffsetLow, dwFileOffsetHigh: DWORD; nNumberOfBytesToLockLow, nNumberOfBytesToLockHigh: DWORD): Boolean;
 function UnlockFile(hFile: THandle; dwFileOffsetLow, dwFileOffsetHigh: DWORD; nNumberOfBytesToUnlockLow, nNumberOfBytesToUnlockHigh: DWORD): Boolean;
 {
@@ -66,7 +66,7 @@ implementation
 
 
 function GetFileSize(Handle : THandle) : Cardinal;
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 begin
   Result := Windows.GetFileSize(Handle, nil);
 {$ELSE}
@@ -81,7 +81,7 @@ end;
 
 
 
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
 
 
 {$ifdef FPC}

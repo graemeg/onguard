@@ -45,20 +45,15 @@ interface
 uses
   Classes,
   SysUtils
-{$IFDEF MSWINDOWS}                                                 {AH.01}
-  ,Windows                                                         {AH.01}
-{$ENDIF}                                                           {AH.01}
+{$IFDEF WINDOWS}
+  ,Windows
+  ,idesn { Serial number info from an IDE hard drive }
+{$ENDIF}
 {$IFDEF IBO_CONSOLE}
   ,ConsoleStubs
 {$ENDIF}  
-//{$IFNDEF IBO_CONSOLE}
-//  ,Controls, Dialogs
-//{$ENDIF}
 {$IFDEF UsingZLib}
   ,ZLib
-{$ENDIF}
-{$IFDEF WIN32}
-  ,idesn
 {$ENDIF}
   ,ogutil
   ;
@@ -822,7 +817,7 @@ begin
   FinalizeTMD(Context, Digest, DigestSize);
 end;
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
 { Obtains information from:
     - Volume sizes (NOT free space)

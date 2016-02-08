@@ -41,9 +41,9 @@ unit ognetwrk;
 interface
 
 uses
-{$IFDEF MSWINDOWS}                                                 {AH.01}
-  Windows,                                                         {AH.01}
-{$ENDIF}                                                           {AH.01}
+{$IFDEF WINDOWS}
+  Windows,
+{$ENDIF}
   Classes, SysUtils,
   ogconst,
   ogutil,
@@ -425,7 +425,7 @@ begin
   end;
 end;
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function IsAppOnNetwork(const ExePath : string) : Boolean;
 begin
   Result := (GetDriveType(PAnsiChar(ExtractFileDrive(ExePath) + '\')) = DRIVE_REMOTE);

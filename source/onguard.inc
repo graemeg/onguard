@@ -47,7 +47,7 @@ Fixme.
 {$S-} {Stack-Overflow Checking}
 {$V-} {Var-String Checking}
 
-{$IFNDEF Win32}
+{$IFNDEF WINDOWS}
   {$F-} {Force Far Calls}
   {$K-} {Smart Callbacks}
 {$ENDIF}

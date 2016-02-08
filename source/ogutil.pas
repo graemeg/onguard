@@ -52,10 +52,6 @@ uses
 {$IFDEF Unix}
   ,BaseUnix
 {$ENDIF}
-{$IFDEF WIN32}
-
-{$ENDIF}
-//  {$IFNDEF IBO_CONSOLE},Dialogs{$ENDIF}
   ;
 
 const
@@ -69,7 +65,7 @@ const
 
 const
   {largest structure that can be created}
-  {$IFDEF Win32}
+  {$IFDEF WINDOWS}
   MaxStructSize = 1024 * 2000000; {2G}
   {$ELSE}
   MaxStructSize = 1024 * 64 - 1;  {64K}
@@ -237,7 +233,7 @@ const
 
 function BufferToHex(const Buf; BufSize : Cardinal) : string;
 function BufferToHexBytes(const Buf; BufSize : Cardinal) : string;
-{$IFNDEF Win32}
+{$IFNDEF WINDOWS}
 function GetDiskSerialNumber(Drive : AnsiChar) : LongInt;
 function MyHashElf(const Buf;  BufSize : LongInt) : LongInt;
 {$ENDIF}
@@ -545,7 +541,7 @@ not fully compatible but easier pure pascal version
 to do it multiplatform}
 
 (*
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 procedure XorMem(var Mem1; const Mem2; Count : Cardinal); register;
 begin
 asm
@@ -709,8 +705,7 @@ begin
   FileSeek(Handle, Save, 0);          {restore previous position}
 end;
 
-{$IFNDEF Win32}
-
+{$IFNDEF WINDOWS}
 function GetLastError: Integer;
 begin
   Result := FpGetErrno;
@@ -720,12 +715,11 @@ procedure SetLastError(Value: Integer);
 begin
   FpSetErrno(Value);
 end;
-
-{$ENDIF not Win32}
+{$ENDIF}
 
 
 (*
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function RolByteX(I, C : Byte) : Byte; register;
 asm
   mov  cl, dl
@@ -1054,7 +1048,7 @@ begin
   FinalizeTMD(Context, Digest, DigestSize);
 end;
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 {!!.05} {added}
 function CreateMachineID(MachineInfo : TEsMachineInfoSet) : LongInt;
 { Obtains information from:
@@ -1177,7 +1171,7 @@ end;
 
   FinalizeTMD(Context, Result, SizeOf(Result));
 end;
-{$ENDIF Win32}
+{$ENDIF WINDOWS}
 
 {%region 'I think this is leftover Win16 code' -fold}
 (*

@@ -83,7 +83,7 @@ Notes:
   --------------------------------------------------------------------
 }
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
   {include the resource compiled using BRCC32.EXE and SRMC.EXE}
   {$R OGSRMGR.R32}
 {$ELSE}
@@ -97,7 +97,7 @@ Notes:
 
 {$R-,S-,I-}
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
   {$H+} {Long strings}                                                 {!!.02}
 {$ENDIF}
 
@@ -119,9 +119,9 @@ unit ogsrmgr;
 interface
 
 uses
-{$IFDEF MSWINDOWS}                                                 {AH.01}
-  Windows,                                                         {AH.01}
-{$ENDIF}                                                           {AH.01}
+{$IFDEF WINDOWS}
+  Windows,
+{$ENDIF}
 {$IFDEF UsingCLX}                                                  {AH.01}
   Types,                                                           {AH.01}
 {$ENDIF}                                                           {AH.01}
@@ -139,7 +139,7 @@ const
 type
   ETpsStringResourceError = class(Exception);
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
   TInt32 = Integer;
 {$ELSE}
   TInt32 = LongInt;
@@ -187,7 +187,7 @@ type
     function GetString(Ident : TInt32) : string;
     property Strings[Ident : TInt32] : string
       read GetString; default;
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
     function GetWideChar(Ident : TInt32; Buffer : PWideChar; BufChars : Integer) : PWideChar;
 {$ENDIF}
 
@@ -225,7 +225,7 @@ begin
   inherited Destroy;
 end;
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 procedure WideCopy(Dest, Src : PWideChar; Len : Integer);
 begin
   while Len > 0 do begin
@@ -479,7 +479,7 @@ end;
 initialization
   TpsResStrings := TOgStringResource.Create(HInstance, 'OGSRMGR_STRINGS');{!!.01}
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 finalization
   FreeTpsResStrings;
 {$ELSE}

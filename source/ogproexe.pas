@@ -50,16 +50,16 @@
 {$ASMMODE INTEL}
 
 
-unit ogproexe;                                                     {AH.01}
+unit ogproexe;
 
 interface
 
 uses
-  {$IFDEF MSWINDOWS} Windows, {$ENDIF}                             {AH.01}
+  {$IFDEF WINDOWS} Windows, {$ENDIF}
   Classes,
-  {$IFDEF MSWINDOWS} MMSystem, {$ENDIF}                            {AH.01}
+  {$IFDEF WINDOWS} MMSystem, {$ENDIF}
   SysUtils,
-  ogutil;                                                 {AH.01}
+  ogutil;
 
 type
   {exe signature record}
@@ -151,7 +151,7 @@ function UnprotectExe(const FileName : string) : Boolean;
 
 {checksum/CRC routines}
 procedure UpdateChecksum(var Sum : LongInt;  const Buf;  BufSize : LongInt);
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function FileCRC32(const FileName : string) : DWord;                     {!!.07}
 {$ELSE}
 function FileCRC32(const FileName : string) : DWord;//LongInt;
@@ -263,7 +263,7 @@ begin
 end;
 
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function IsExeTampered(CheckSize : Boolean) : TExeStatus;
   {-return one of the possible TExeResult states}
 var
@@ -378,7 +378,7 @@ begin
 end;
 {$ENDIF}
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function ProtectExe(const FileName : string;  EraseMarker : Boolean) : Boolean;
   {-stamp exe with crc and file size. optionally erase search markers}
 var
@@ -533,7 +533,7 @@ end;
 {$ENDIF}
 
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function UnprotectExe(const FileName : string) : Boolean;
   {-writes uninitialized signature record. marker must not have been erased}
 var
@@ -664,7 +664,7 @@ begin
     Sum := Sum + Bytes[I];
 end;
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function FileCRC32(const FileName : string) : DWord;                 {!!.07}
 var
   Fh      : THandle;

@@ -44,10 +44,10 @@ unit ogfirst;
 interface
 
 uses
-{$IFDEF MSWINDOWS}                                                 {AH.01}
-  Windows,                                                         {AH.01}
-{$ENDIF}                                                           {AH.01}
-{$IFDEF LINUX}                                                     {AH.01}
+{$IFDEF WINDOWS}
+  Windows,
+{$ENDIF}
+{$IFDEF LINUX}
   BaseUnix,
 //  Libc,//only because  S_IRWXU was missing from baseunix under 0.9.16
   //fix it later
@@ -66,7 +66,7 @@ const
 implementation
 
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 var
   FirstInstance : Boolean;
   InstanceMutex : THandle;
@@ -83,7 +83,7 @@ var
 {limit instances routines}
 function IsFirstInstance : Boolean;
 begin
-  {$IFDEF Win32}
+  {$IFDEF WINDOWS}
   Result := FirstInstance;
   {$ELSE}
   {$IFDEF LINUX}
@@ -94,7 +94,7 @@ begin
   {$ENDIF}
 end;
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 procedure ActivateFirstInstance;
 var
   ClassBuf,
@@ -149,7 +149,7 @@ end;
 
 
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 function GetMutexName : string;
 var
   WindowBuf : array [0..512] of AnsiChar;
