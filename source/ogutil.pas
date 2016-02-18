@@ -243,6 +243,7 @@ function Max(A, B : LongInt): LongInt;
 function Min(A, B : LongInt) : LongInt;
 procedure XorMem(var Mem1; const Mem2; Count : Cardinal);
 function OgFormatDate(Value : TDateTime) : string;                     {!!.09}
+function OgStrToDate(Value: String): TDateTime;
 
 {file related routines}
 function GetFileSize(Handle : THandle) : Cardinal;
@@ -680,18 +681,13 @@ end;
 {!!.09}
 function OgFormatDate(Value : TDateTime) : string;
   {convert date to string with 4-digit year and 2-digit month}
-var
-  S : string;
 begin
-  FormatSettings.ShortDateFormat := 'yyyy-mm-dd';
-  {
-  S := ShortDateFormat;
-  if Pos('yyyy', S) = 0 then
-    Insert('yy', S, Pos('yy', S));
-  if Pos('MMM', S) > 0 then
-    Delete(S, Pos('MMM', S), 1);
-    }
-  Result := DateToStr(Value);//FormatDateTime(S, Value)
+  Result := FormatDateTime('yyyy"-"mm"-"dd', Value);
+end;
+
+function OgStrToDate(Value: String): TDateTime;
+begin
+  Result := StrToDate(Value, 'yyyy"-"mm"-"dd', '-');
 end;
 
 

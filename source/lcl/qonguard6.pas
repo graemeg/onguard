@@ -143,7 +143,7 @@ begin
 
     if DateModifierCb.Checked then begin
       try
-        D := StrToDate(ModDateEd.Text);
+        D := OgStrToDate(ModDateEd.Text);
       except
         {ignore errors and don't generate modifier}
         D := 0;
