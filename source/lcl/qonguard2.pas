@@ -197,7 +197,7 @@ procedure TCodeGenerateFrm.FormCreate(Sender: TObject);
 var
   D : TDateTime;
 begin
-  DateSeparator:= '-';                                               {!! To fix StrToDate EConvertError exception if current DateSeparatoris '/': FormatSettings.ShortDateFormat is only used - later, in OgFormatDate function - to determine the order of ...the DateSeparator }            
+  DateSeparator := '-';                                              {!! To fix a StrToDate EConvertError exception if current DateSeparator = '/'. Indeed, FormatSettings.ShortDateFormat is only used - later, in OgFormatDate() function - to determine the order of ...the DateSeparator }            
   NoModifierCb.Checked := True;
   CodesNbk.ActivePageIndex := Ord(FCodeType);
   BlockKeyEd.Text := BufferToHex(FKey, SizeOf(FKey));
