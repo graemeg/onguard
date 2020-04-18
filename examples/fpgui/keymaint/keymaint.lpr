@@ -6,6 +6,7 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
+  Interfaces, // this includes the LCL widgetset 
   Classes
   ,fpg_main
   ,frm_keymaint
