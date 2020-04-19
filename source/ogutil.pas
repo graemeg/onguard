@@ -678,16 +678,27 @@ end;
 
 
 
-{!!.09}
-function OgFormatDate(Value : TDateTime) : string;
-  {convert date to string with 4-digit year and 2-digit month}
+{ Ensure it's in yyyy-mm-dd format (ISO8601 guidelines) }
+function OgFormatDate(Value: TDateTime): string;
+var
+  fmt: TFormatSettings;
 begin
-  Result := FormatDateTime('yyyy"-"mm"-"dd', Value);
+  fmt := FormatSettings;
+  fmt.ShortDateFormat := 'yyyy-mm-dd';
+  fmt.DateSeparator := '-';
+  Result := DateToStr(Value, fmt);
 end;
 
+{ OnGuard only uses "yyyy-mm-dd" date format. GUI front-ends will be modified to
+  ensure this. }
 function OgStrToDate(Value: String): TDateTime;
+var
+  fmt: TFormatSettings;
 begin
-  Result := StrToDate(Value, 'yyyy"-"mm"-"dd', '-');
+  fmt := FormatSettings;
+  fmt.ShortDateFormat := 'yyyy-mm-dd';
+  fmt.DateSeparator := '-';
+  Result := StrToDate(Value, fmt);
 end;
 
 
