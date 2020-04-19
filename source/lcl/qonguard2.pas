@@ -239,7 +239,7 @@ begin
     case CodesNbk.ActivePageIndex of
       0 : begin
             try
-              D1 := StrToDate(StartDateEd.Text);
+              D1 := OgStrToDate(StartDateEd.Text);
             except
               on EConvertError do begin
                 ShowMessage(SCInvalidStartDate);
@@ -250,7 +250,7 @@ begin
             end;
 
             try
-              D2 := StrToDate(EndDateEd.Text);
+              D2 := OgStrToDate(EndDateEd.Text);
             except
               on EConvertError do begin
                 ShowMessage(SCInvalidStartDate);
@@ -270,7 +270,7 @@ begin
           end;
       1 : begin
             try
-              D1 := StrToDate(DaysExpiresEd.Text);
+              D1 := OgStrToDate(DaysExpiresEd.Text);
             except
               on EConvertError do begin
                 ShowMessage(SCInvalidExDate);
@@ -283,7 +283,7 @@ begin
           end;
       2 : begin
             try
-              D1 := StrToDate(RegExpiresEd.Text);
+              D1 := OgStrToDate(RegExpiresEd.Text);
             except
               on EConvertError do begin
                 ShowMessage(SCInvalidExDate);
@@ -296,7 +296,7 @@ begin
           end;
       3 : begin
             try
-              D1 := StrToDate(SerialExpiresEd.Text);
+              D1 := OgStrToDate(SerialExpiresEd.Text);
             except
               on EConvertError do begin
                 ShowMessage(SCInvalidExDate);
@@ -309,7 +309,7 @@ begin
           end;
       4 : begin
             try
-              D1 := StrToDate(UsageExpiresEd.Text);
+              D1 := OgStrToDate(UsageExpiresEd.Text);
             except
               on EConvertError do begin
                 ShowMessage(SCInvalidExDate);
@@ -329,7 +329,7 @@ begin
           end;
       6 : begin
             try
-              D1 := StrToDate(SpecialExpiresEd.Text);
+              D1 := OgStrToDate(SpecialExpiresEd.Text);
             except
               on EConvertError do begin
                 ShowMessage(SCInvalidExDate);
@@ -457,7 +457,7 @@ begin
 
     if DateModifierCb.Checked then begin
       try
-        D := StrToDate(ModDateEd.Text);
+        D := OgStrToDate(ModDateEd.Text);
       except
         {ignore errors and don't generate modifier}
         D := 0;
